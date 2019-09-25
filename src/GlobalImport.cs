@@ -4,7 +4,7 @@ using System.Diagnostics;
 namespace Wasmtime
 {
     /// <summary>
-    /// Represents a global variable imported to a WASM module.
+    /// Represents a global variable imported to a WebAssembly module.
     /// </summary>
     public class GlobalImport : Import
     {

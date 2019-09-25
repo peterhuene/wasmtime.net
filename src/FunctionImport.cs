@@ -5,7 +5,7 @@ using System.Diagnostics;
 namespace Wasmtime
 {
     /// <summary>
-    /// Represents a function imported to a WASM module.
+    /// Represents a function imported to a WebAssembly module.
     /// </summary>
     public class FunctionImport : Import
     {

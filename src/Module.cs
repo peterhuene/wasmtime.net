@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 namespace Wasmtime
 {
     /// <summary>
-    /// Represents a WASM module.
+    /// Represents a WebAssembly module.
     /// </summary>
     public class Module : IDisposable
     {
@@ -31,7 +31,7 @@ namespace Wasmtime
 
                 if (Handle.IsInvalid)
                 {
-                    throw new WasmtimeException($"WASM module {name} is not valid.");
+                    throw new WasmtimeException($"WebAssembly module '{name}' is not valid.");
                 }
             }
             finally
@@ -46,7 +46,7 @@ namespace Wasmtime
         }
 
         /// <summary>
-        /// Instantiates a WASM module.
+        /// Instantiates a WebAssembly module.
         /// </summary>
         /// <typeparam name="T">The host type defining the imports to the module.</typeparam>
         /// <returns>Returns a new <see href="Instance" />.</returns>

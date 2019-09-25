@@ -3,7 +3,7 @@ using System;
 namespace Wasmtime
 {
     /// <summary>
-    /// Represents the possible kinds of WASM values.
+    /// Represents the possible kinds of WebAssembly values.
     /// </summary>
     public enum ValueKind
     {

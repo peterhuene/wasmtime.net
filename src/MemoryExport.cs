@@ -4,7 +4,7 @@ using System.Diagnostics;
 namespace Wasmtime
 {
     /// <summary>
-    /// Represents a memory exported from a WASM module.
+    /// Represents a memory exported from a WebAssembly module.
     /// </summary>
     public class MemoryExport : Export
     {

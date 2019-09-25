@@ -4,7 +4,7 @@ using System.Diagnostics;
 namespace Wasmtime
 {
     /// <summary>
-    /// Represents a table imported to a WASM module.
+    /// Represents a table imported to a WebAssembly module.
     /// </summary>
     public class TableImport : Import
     {

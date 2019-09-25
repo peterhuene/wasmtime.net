@@ -3,7 +3,7 @@ using System;
 namespace Wasmtime
 {
     /// <summary>
-    /// Used to mark .NET methods and fields as imports to a WASM module.
+    /// Used to mark .NET methods and fields as imports to a WebAssembly module.
     /// </summary>
     [AttributeUsage(AttributeTargets.Method | AttributeTargets.Field)]
     public class ImportAttribute : Attribute

@@ -22,7 +22,7 @@ namespace Wasmtime
         /// Create a <see href="Module"/> given the module name and bytes.
         /// </summary>
         /// <param name="name">The name of the module.</param>
-        /// <param name="bytes">The WASM module bytes.</param>
+        /// <param name="bytes">The bytes of the module.</param>
         /// <returns>Returns a new <see href="Module"/>.</returns>
         public Module CreateModule(string name, byte[] bytes)
         {
@@ -40,10 +40,10 @@ namespace Wasmtime
         }
 
         /// <summary>
-        /// Create a <see href="Module"/> given the module name and path to the WASM file.
+        /// Create a <see href="Module"/> given the module name and path to the WebAssembly file.
         /// </summary>
         /// <param name="name">The name of the module.</param>
-        /// <param name="path">The path to the WASM file.</param>
+        /// <param name="path">The path to the WebAssembly file.</param>
         /// <returns>Returns a new <see href="Module"/>.</returns>
         public Module CreateModule(string name, string path)
         {
@@ -51,9 +51,9 @@ namespace Wasmtime
         }
 
         /// <summary>
-        /// Create a <see href="Module"/> given the path to the WASM file.
+        /// Create a <see href="Module"/> given the path to the WebAssembly file.
         /// </summary>
-        /// <param name="path">The path to the WASM file.</param>
+        /// <param name="path">The path to the WebAssembly file.</param>
         /// <returns>Returns a new <see href="Module"/>.</returns>
         public Module CreateModule(string path)
         {

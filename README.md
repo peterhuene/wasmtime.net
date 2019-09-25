@@ -2,9 +2,9 @@
 
 A .NET API for [Wasmtime](https://github.com/CraneStation/wasmtime).
 
-Wasmtime is a standalone runtime for [WebAssembly](https://webassembly.org/) (WASM), using the Cranelift JIT compiler.
+Wasmtime is a standalone runtime for [WebAssembly](https://webassembly.org/), using the Cranelift JIT compiler.
 
-Wasmtime.NET allows .NET code to instantiate WASM modules and to interact with them in-process.
+Wasmtime.NET allows .NET code to instantiate WebAssembly modules and to interact with them in-process.
 
 # Getting Started
 

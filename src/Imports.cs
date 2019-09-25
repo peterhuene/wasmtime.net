@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Wasmtime
 {
     /// <summary>
-    /// Represents imported functions, globals, tables, and memories to a WASM module.
+    /// Represents imported functions, globals, tables, and memories to a WebAssembly module.
     /// </summary>
     public class Imports
     {
@@ -73,22 +73,22 @@ namespace Wasmtime
         }
 
         /// <summary>
-        /// The imported functions required by a WASM module.
+        /// The imported functions required by a WebAssembly module.
         /// </summary>
         public IReadOnlyList<FunctionImport> Functions { get; private set; }
 
         /// <summary>
-        /// The imported globals required by a WASM module.
+        /// The imported globals required by a WebAssembly module.
         /// </summary>
         public IReadOnlyList<GlobalImport> Globals { get; private set; }
 
         /// <summary>
-        /// The imported tables required by a WASM module.
+        /// The imported tables required by a WebAssembly module.
         /// </summary>
         public IReadOnlyList<TableImport> Tables { get; private set; }
 
         /// <summary>
-        /// The imported memories required by a WASM module.
+        /// The imported memories required by a WebAssembly module.
         /// </summary>
         public IReadOnlyList<MemoryImport> Memories { get; private set; }
 

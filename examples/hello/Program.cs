@@ -8,7 +8,7 @@ namespace HelloExample
         [Import("hello")]
         public void SayHello()
         {
-            Console.WriteLine("Hello from C#, WASM!");
+            Console.WriteLine("Hello from C#, WebAssembly!");
         }
     }
 

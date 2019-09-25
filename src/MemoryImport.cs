@@ -4,7 +4,7 @@ using System.Diagnostics;
 namespace Wasmtime
 {
     /// <summary>
-    /// Represents a memory imported to a WASM module.
+    /// Represents a memory imported to a WebAssembly module.
     /// </summary>
     public class MemoryImport : Import
     {

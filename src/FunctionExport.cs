@@ -5,7 +5,7 @@ using System.Diagnostics;
 namespace Wasmtime
 {
     /// <summary>
-    /// Represents a function exported from a WASM module.
+    /// Represents a function exported from a WebAssembly module.
     /// </summary>
     public class FunctionExport : Export
     {
@@ -22,12 +22,12 @@ namespace Wasmtime
         }
 
         /// <summary>
-        /// The parameter of the exported WASM function.
+        /// The parameter of the exported WebAssembly function.
         /// </summary>
         public IReadOnlyList<ValueKind> Parameters { get; private set; }
 
         /// <summary>
-        /// The results of the exported WASM function.
+        /// The results of the exported WebAssembly function.
         /// </summary>
         public IReadOnlyList<ValueKind> Results { get; private set; }
     }

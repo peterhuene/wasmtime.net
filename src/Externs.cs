@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Wasmtime
 {
     /// <summary>
-    /// Represents external (instantiated) WASM functions, globals, tables, and memories.
+    /// Represents external (instantiated) WebAssembly functions, globals, tables, and memories.
     /// </summary>
     public class Externs
     {
@@ -35,7 +35,7 @@ namespace Wasmtime
         }
 
         /// <summary>
-        /// The extern functions from an instantiated WASM module.
+        /// The extern functions from an instantiated WebAssembly module.
         /// </summary>
         public IReadOnlyList<ExternFunction> Functions { get; private set; }
     }

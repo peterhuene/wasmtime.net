@@ -10,7 +10,7 @@ using System.Text;
 namespace Wasmtime
 {
     /// <summary>
-    /// Represents an instantiated WASM module.
+    /// Represents an instantiated WebAssembly module.
     /// </summary>
     public class Instance : DynamicObject, IDisposable
     {
@@ -49,7 +49,7 @@ namespace Wasmtime
         }
 
         /// <summary>
-        /// The WASM module associated with the instantiation.
+        /// The WebAssembly module associated with the instantiation.
         /// </summary>
         public Module Module { get; private set; }
 
@@ -159,7 +159,7 @@ namespace Wasmtime
 
         private static void ThrowBindingException(FunctionImport import, MethodInfo method, string message)
         {
-            throw new WasmtimeException($"Unable to bind method '{method.DeclaringType.Name}.{method.Name}' to WASM import '{import}': {message}.");
+            throw new WasmtimeException($"Unable to bind method '{method.DeclaringType.Name}.{method.Name}' to WebAssembly import '{import}': {message}.");
         }
 
         private static void ValidateImportFunction(FunctionImport import, MethodInfo method)

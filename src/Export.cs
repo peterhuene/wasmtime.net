@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 namespace Wasmtime
 {
     /// <summary>
-    /// Represents an export of a WASM module.
+    /// Represents an export of a WebAssembly module.
     /// </summary>
     public abstract class Export
     {

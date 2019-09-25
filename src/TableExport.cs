@@ -4,7 +4,7 @@ using System.Diagnostics;
 namespace Wasmtime
 {
     /// <summary>
-    /// Represents a table exported from a WASM module.
+    /// Represents a table exported from a WebAssembly module.
     /// </summary>
     public class TableExport : Export
     {

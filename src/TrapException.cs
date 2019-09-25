@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 namespace Wasmtime
 {
     /// <summary>
-    /// The exception for WASM traps.
+    /// The exception for WebAssembly traps.
     /// </summary>
     [Serializable]
     public class TrapException : WasmtimeException
@@ -36,6 +36,6 @@ namespace Wasmtime
             }
         }
 
-        // TODO: expose WASM frames
+        // TODO: expose trap frames
     }
 }
