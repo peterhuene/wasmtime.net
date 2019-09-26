@@ -553,5 +553,10 @@ namespace Wasmtime
 
         [DllImport("wasmtime_api")]
         public static unsafe extern wasm_limits_t* wasm_tabletype_limits(IntPtr tableType);
+
+        // Memory type imports
+
+        [DllImport("wasmtime_api")]
+        public static unsafe extern wasm_limits_t* wasm_memorytype_limits(IntPtr memoryType);
     }
 }

@@ -13,9 +13,9 @@ namespace Wasmtime.Tests
         protected override string ModuleFileName => "GlobalImports.wasm";
     }
 
-    public class GlobalImports : IClassFixture<GlobalImportsFixture>
+    public class GlobalImportsTests : IClassFixture<GlobalImportsFixture>
     {
-        public GlobalImports(GlobalImportsFixture fixture)
+        public GlobalImportsTests(GlobalImportsFixture fixture)
         {
             Fixture = fixture;
         }

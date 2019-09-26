@@ -33,11 +33,11 @@ TODO: add this section
 | Module function imports               | ✅     |
 | Module global imports                 | ✅     |
 | Module table imports                  | ✅     |
-| Module memory imports                 | 🔄     |
+| Module memory imports                 | ✅     |
 | Module function exports               | ✅     |
 | Module global exports                 | ✅     |
 | Module table exports                  | ✅     |
-| Module memory exports                 | 🔄     |
+| Module memory exports                 | ✅     |
 | Extern instance functions             | ✅     |
 | Extern instance globals               | ⬜️     |
 | Extern instance tables                | ⬜️     |

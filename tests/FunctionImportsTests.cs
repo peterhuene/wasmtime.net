@@ -13,9 +13,9 @@ namespace Wasmtime.Tests
         protected override string ModuleFileName => "FunctionImports.wasm";
     }
 
-    public class FunctionImports : IClassFixture<FunctionImportsFixture>
+    public class FunctionImportsTests : IClassFixture<FunctionImportsFixture>
     {
-        public FunctionImports(FunctionImportsFixture fixture)
+        public FunctionImportsTests(FunctionImportsFixture fixture)
         {
             Fixture = fixture;
         }

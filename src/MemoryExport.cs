@@ -13,16 +13,23 @@ namespace Wasmtime
             Debug.Assert(Interop.wasm_externtype_kind(externType) == Interop.wasm_externkind_t.WASM_EXTERN_MEMORY);
 
             var memoryType = Interop.wasm_externtype_as_memorytype_const(externType);
+
+            unsafe
+            {
+                var limits = Interop.wasm_memorytype_limits(memoryType);
+                Minimum = limits->min;
+                Maximum = limits->max;
+            }
         }
 
         /// <summary>
         /// The minimum memory size (in WebAssembly page units).
         /// </summary>
-        public int Minimum { get; private set; }
+        public uint Minimum { get; private set; }
 
         /// <summary>
         /// The maximum memory size (in WebAssembly page units).
         /// </summary>
-        public int Maximum { get; private set; }
+        public uint Maximum { get; private set; }
     }
 }

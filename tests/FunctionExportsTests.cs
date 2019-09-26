@@ -13,9 +13,9 @@ namespace Wasmtime.Tests
         protected override string ModuleFileName => "FunctionExports.wasm";
     }
 
-    public class FunctionExports : IClassFixture<FunctionExportsFixture>
+    public class FunctionExportsTests : IClassFixture<FunctionExportsFixture>
     {
-        public FunctionExports(FunctionExportsFixture fixture)
+        public FunctionExportsTests(FunctionExportsFixture fixture)
         {
             Fixture = fixture;
         }
