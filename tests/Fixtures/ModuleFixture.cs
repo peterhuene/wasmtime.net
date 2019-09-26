@@ -15,6 +15,23 @@ namespace Wasmtime.Tests
 
         public void Dispose()
         {
+            if (Module != null)
+            {
+                Module.Dispose();
+                Module = null;
+            }
+
+            if (Store != null)
+            {
+                Store.Dispose();
+                Store = null;
+            }
+
+            if (Engine != null)
+            {
+                Engine.Dispose();
+                Engine = null;
+            }
         }
 
         public Engine Engine { get; set; }
