@@ -26,7 +26,7 @@ namespace Wasmtime.Tests
         [MemberData(nameof(GetGlobalImports))]
         public void ItHasTheExpectedGlobalImports(string importModule, string importName, ValueKind expectedKind, bool expectedMutable)
         {
-            var import = Fixture.Module.Imports.Globals.Where(f => f.Module == importModule && f.Name == importName).FirstOrDefault();
+            var import = Fixture.Module.Imports.Globals.Where(f => f.ModuleName == importModule && f.Name == importName).FirstOrDefault();
             import.Should().NotBeNull();
             import.Kind.Should().Be(expectedKind);
             import.IsMutable.Should().Be(expectedMutable);

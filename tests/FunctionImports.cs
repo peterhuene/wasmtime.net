@@ -26,7 +26,7 @@ namespace Wasmtime.Tests
         [MemberData(nameof(GetFunctionImports))]
         public void ItHasTheExpectedFunctionImports(string importModule, string importName, ValueKind[] expectedParameters, ValueKind[] expectedResults)
         {
-            var import = Fixture.Module.Imports.Functions.Where(f => f.Module == importModule && f.Name == importName).FirstOrDefault();
+            var import = Fixture.Module.Imports.Functions.Where(f => f.ModuleName == importModule && f.Name == importName).FirstOrDefault();
             import.Should().NotBeNull();
             import.Parameters.Should().Equal(expectedParameters);
             import.Results.Should().Equal(expectedResults);

@@ -26,7 +26,7 @@ namespace Wasmtime
         /// <summary>
         /// The value is a reference.
         /// </summary>
-        AnyRef,
+        AnyRef = 128,
         /// <summary>
         /// The value is a function reference.
         /// </summary>

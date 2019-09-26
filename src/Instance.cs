@@ -133,8 +133,8 @@ namespace Wasmtime
 
                 return attribute.Name == import.Name &&
                         ((string.IsNullOrEmpty(attribute.Module) &&
-                        string.IsNullOrEmpty(import.Module)) ||
-                        attribute.Module == import.Module);
+                        string.IsNullOrEmpty(import.ModuleName)) ||
+                        attribute.Module == import.ModuleName);
             }).FirstOrDefault();
 
             if (method == null)

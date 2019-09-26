@@ -12,8 +12,8 @@ namespace Wasmtime
         {
             unsafe
             {
-                var module = Interop.wasm_importtype_module(importType);
-                Module = Marshal.PtrToStringUTF8((IntPtr)module->data, (int)module->size);
+                var moduleName = Interop.wasm_importtype_module(importType);
+                ModuleName = Marshal.PtrToStringUTF8((IntPtr)moduleName->data, (int)moduleName->size);
 
                 var name = Interop.wasm_importtype_name(importType);
                 Name = Marshal.PtrToStringUTF8((IntPtr)name->data, (int)name->size);
@@ -23,7 +23,7 @@ namespace Wasmtime
         /// <summary>
         /// The module name of the import.
         /// </summary>
-        public string Module { get; private set; }
+        public string ModuleName { get; private set; }
 
         /// <summary>
         /// The name of the import.
@@ -33,7 +33,7 @@ namespace Wasmtime
         /// <inheritdoc/>
         public override string ToString()
         {
-            return $"{Module}{(string.IsNullOrEmpty(Module) ? "" : ".")}{Name}";
+            return $"{ModuleName}{(string.IsNullOrEmpty(ModuleName) ? "" : ".")}{Name}";
         }
     }
 }
