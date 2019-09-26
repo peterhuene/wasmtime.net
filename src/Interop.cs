@@ -193,6 +193,14 @@ namespace Wasmtime
             public wasm_val_union_t of;
         }
 
+        [StructLayout(LayoutKind.Sequential)]
+        internal struct wasm_limits_t
+        {
+            public uint min;
+
+            public uint max;
+        }
+
         internal static wasm_val_t ToValue(object o)
         {
             wasm_val_t value = new wasm_val_t();
@@ -537,5 +545,13 @@ namespace Wasmtime
 
         [DllImport("wasmtime_api")]
         public static extern void wasm_trap_message(IntPtr trap, out wasm_byte_vec_t message);
+
+        // Table type imports
+
+        [DllImport("wasmtime_api")]
+        public static extern IntPtr wasm_tabletype_element(IntPtr tableType);
+
+        [DllImport("wasmtime_api")]
+        public static unsafe extern wasm_limits_t* wasm_tabletype_limits(IntPtr tableType);
     }
 }

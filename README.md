@@ -32,11 +32,11 @@ TODO: add this section
 | Wasmtime instance class               | 🔄     |
 | Module function imports               | ✅     |
 | Module global imports                 | ✅     |
-| Module table imports                  | 🔄     |
+| Module table imports                  | ✅     |
 | Module memory imports                 | 🔄     |
 | Module function exports               | ✅     |
 | Module global exports                 | ✅     |
-| Module table exports                  | 🔄     |
+| Module table exports                  | ✅     |
 | Module memory exports                 | 🔄     |
 | Extern instance functions             | ✅     |
 | Extern instance globals               | ⬜️     |
