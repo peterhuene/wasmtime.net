@@ -23,4 +23,5 @@
   (import "" "no_params_one_f64_result" (func $.f9 (type $t9)))
   (import "" "one_result_of_each_type" (func $.f10 (type $t10)))
   (import "" "one_param_and_result_of_each_type" (func $.f11 (type $t11)))
+  (import "other" "function_from_module" (func $.f12 (type $t0)))
 )

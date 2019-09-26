@@ -10,7 +10,7 @@ namespace Wasmtime.Tests
         {
             Engine = new Engine();
             Store = Engine.CreateStore();
-            Module = Store.CreateModule(Path.Combine("modules", ModuleFileName));
+            Module = Store.CreateModule(Path.Combine("Modules", ModuleFileName));
         }
 
         public void Dispose()

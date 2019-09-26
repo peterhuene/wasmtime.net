@@ -42,8 +42,8 @@ namespace Wasmtime.Tests
         {
             yield return new object[] {
                 "no_params_no_results",
-                new ValueKind[0],
-                new ValueKind[0]
+                Array.Empty<ValueKind>(),
+                Array.Empty<ValueKind>()
             };
 
             yield return new object[] {
@@ -51,7 +51,7 @@ namespace Wasmtime.Tests
                 new ValueKind[] {
                     ValueKind.Int32
                 },
-                new ValueKind[0]
+                Array.Empty<ValueKind>()
             };
 
             yield return new object[] {
@@ -59,7 +59,7 @@ namespace Wasmtime.Tests
                 new ValueKind[] {
                     ValueKind.Int64
                 },
-                new ValueKind[0]
+                Array.Empty<ValueKind>()
             };
 
             yield return new object[] {
@@ -67,7 +67,7 @@ namespace Wasmtime.Tests
                 new ValueKind[] {
                     ValueKind.Float32
                 },
-                new ValueKind[0]
+                Array.Empty<ValueKind>()
             };
 
             yield return new object[] {
@@ -75,7 +75,7 @@ namespace Wasmtime.Tests
                 new ValueKind[] {
                     ValueKind.Float64
                 },
-                new ValueKind[0]
+                Array.Empty<ValueKind>()
             };
 
             yield return new object[] {
@@ -86,12 +86,12 @@ namespace Wasmtime.Tests
                     ValueKind.Float32,
                     ValueKind.Float64
                 },
-                new ValueKind[0]
+                Array.Empty<ValueKind>()
             };
 
             yield return new object[] {
                 "no_params_one_i32_result",
-                new ValueKind[0],
+                Array.Empty<ValueKind>(),
                 new ValueKind[] {
                     ValueKind.Int32,
                 }
@@ -99,7 +99,7 @@ namespace Wasmtime.Tests
 
             yield return new object[] {
                 "no_params_one_i64_result",
-                new ValueKind[0],
+                Array.Empty<ValueKind>(),
                 new ValueKind[] {
                     ValueKind.Int64,
                 }
@@ -107,7 +107,7 @@ namespace Wasmtime.Tests
 
             yield return new object[] {
                 "no_params_one_f32_result",
-                new ValueKind[0],
+                Array.Empty<ValueKind>(),
                 new ValueKind[] {
                     ValueKind.Float32,
                 }
@@ -115,7 +115,7 @@ namespace Wasmtime.Tests
 
             yield return new object[] {
                 "no_params_one_f64_result",
-                new ValueKind[0],
+                Array.Empty<ValueKind>(),
                 new ValueKind[] {
                     ValueKind.Float64,
                 }
@@ -123,7 +123,7 @@ namespace Wasmtime.Tests
 
             yield return new object[] {
                 "one_result_of_each_type",
-                new ValueKind[0],
+                Array.Empty<ValueKind>(),
                 new ValueKind[] {
                     ValueKind.Int32,
                     ValueKind.Int64,

@@ -24,12 +24,12 @@ namespace Wasmtime.Tests
 
         [Theory]
         [MemberData(nameof(GetFunctionImports))]
-        public void ItHasTheExpectedFunctionImports(string exportName, ValueKind[] expectedParameters, ValueKind[] expectedResults)
+        public void ItHasTheExpectedFunctionImports(string importModule, string importName, ValueKind[] expectedParameters, ValueKind[] expectedResults)
         {
-            var export = Fixture.Module.Imports.Functions.Where(f => f.Name == exportName).FirstOrDefault();
-            export.Should().NotBeNull();
-            export.Parameters.Should().Equal(expectedParameters);
-            export.Results.Should().Equal(expectedResults);
+            var import = Fixture.Module.Imports.Functions.Where(f => f.Module == importModule && f.Name == importName).FirstOrDefault();
+            import.Should().NotBeNull();
+            import.Parameters.Should().Equal(expectedParameters);
+            import.Results.Should().Equal(expectedResults);
         }
 
         [Fact]
@@ -41,44 +41,50 @@ namespace Wasmtime.Tests
         public static IEnumerable<object[]> GetFunctionImports()
         {
             yield return new object[] {
+                "",
                 "no_params_no_results",
-                new ValueKind[0],
-                new ValueKind[0]
+                Array.Empty<ValueKind>(),
+                Array.Empty<ValueKind>()
             };
 
             yield return new object[] {
+                "",
                 "one_i32_param_no_results",
                 new ValueKind[] {
                     ValueKind.Int32
                 },
-                new ValueKind[0]
+                Array.Empty<ValueKind>()
             };
 
             yield return new object[] {
+                "",
                 "one_i64_param_no_results",
                 new ValueKind[] {
                     ValueKind.Int64
                 },
-                new ValueKind[0]
+                Array.Empty<ValueKind>()
             };
 
             yield return new object[] {
+                "",
                 "one_f32_param_no_results",
                 new ValueKind[] {
                     ValueKind.Float32
                 },
-                new ValueKind[0]
+                Array.Empty<ValueKind>()
             };
 
             yield return new object[] {
+                "",
                 "one_f64_param_no_results",
                 new ValueKind[] {
                     ValueKind.Float64
                 },
-                new ValueKind[0]
+                Array.Empty<ValueKind>()
             };
 
             yield return new object[] {
+                "",
                 "one_param_of_each_type",
                 new ValueKind[] {
                     ValueKind.Int32,
@@ -86,44 +92,49 @@ namespace Wasmtime.Tests
                     ValueKind.Float32,
                     ValueKind.Float64
                 },
-                new ValueKind[0]
+                Array.Empty<ValueKind>()
             };
 
             yield return new object[] {
+                "",
                 "no_params_one_i32_result",
-                new ValueKind[0],
+                Array.Empty<ValueKind>(),
                 new ValueKind[] {
                     ValueKind.Int32,
                 }
             };
 
             yield return new object[] {
+                "",
                 "no_params_one_i64_result",
-                new ValueKind[0],
+                Array.Empty<ValueKind>(),
                 new ValueKind[] {
                     ValueKind.Int64,
                 }
             };
 
             yield return new object[] {
+                "",
                 "no_params_one_f32_result",
-                new ValueKind[0],
+                Array.Empty<ValueKind>(),
                 new ValueKind[] {
                     ValueKind.Float32,
                 }
             };
 
             yield return new object[] {
+                "",
                 "no_params_one_f64_result",
-                new ValueKind[0],
+                Array.Empty<ValueKind>(),
                 new ValueKind[] {
                     ValueKind.Float64,
                 }
             };
 
             yield return new object[] {
+                "",
                 "one_result_of_each_type",
-                new ValueKind[0],
+                Array.Empty<ValueKind>(),
                 new ValueKind[] {
                     ValueKind.Int32,
                     ValueKind.Int64,
@@ -133,6 +144,7 @@ namespace Wasmtime.Tests
             };
 
             yield return new object[] {
+                "",
                 "one_param_and_result_of_each_type",
                 new ValueKind[] {
                     ValueKind.Int32,
@@ -146,6 +158,13 @@ namespace Wasmtime.Tests
                     ValueKind.Float32,
                     ValueKind.Float64,
                 }
+            };
+
+            yield return new object[] {
+                "other",
+                "function_from_module",
+                Array.Empty<ValueKind>(),
+                Array.Empty<ValueKind>(),
             };
         }
     }
