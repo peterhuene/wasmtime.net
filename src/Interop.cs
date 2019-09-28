@@ -10,9 +10,9 @@ namespace Wasmtime
     /// <remarks>See https://github.com/WebAssembly/wasm-c-api/blob/master/include/wasm.h for the C API reference.</remarks>
     internal static class Interop
     {
-        internal class WasmtimeEngineHandle : SafeHandle
+        internal class EngineHandle : SafeHandle
         {
-            public WasmtimeEngineHandle() : base(IntPtr.Zero, true)
+            public EngineHandle() : base(IntPtr.Zero, true)
             {
             }
 
@@ -25,9 +25,9 @@ namespace Wasmtime
             }
         }
 
-        internal class WasmtimeStoreHandle : SafeHandle
+        internal class StoreHandle : SafeHandle
         {
-            public WasmtimeStoreHandle() : base(IntPtr.Zero, true)
+            public StoreHandle() : base(IntPtr.Zero, true)
             {
             }
 
@@ -40,9 +40,9 @@ namespace Wasmtime
             }
         }
 
-        internal class WasmtimeModuleHandle : SafeHandle
+        internal class ModuleHandle : SafeHandle
         {
-            public WasmtimeModuleHandle() : base(IntPtr.Zero, true)
+            public ModuleHandle() : base(IntPtr.Zero, true)
             {
             }
 
@@ -55,9 +55,9 @@ namespace Wasmtime
             }
         }
 
-        internal class WasmtimeFunctionHandle : SafeHandle
+        internal class FunctionHandle : SafeHandle
         {
-            public WasmtimeFunctionHandle() : base(IntPtr.Zero, true)
+            public FunctionHandle() : base(IntPtr.Zero, true)
             {
             }
 
@@ -70,9 +70,24 @@ namespace Wasmtime
             }
         }
 
-        internal class WasmtimeInstanceHandle : SafeHandle
+        internal class GlobalHandle : SafeHandle
         {
-            public WasmtimeInstanceHandle() : base(IntPtr.Zero, true)
+            public GlobalHandle() : base(IntPtr.Zero, true)
+            {
+            }
+
+            public override bool IsInvalid => handle == IntPtr.Zero;
+
+            protected override bool ReleaseHandle()
+            {
+                Interop.wasm_global_delete(handle);
+                return true;
+            }
+        }
+
+        internal class InstanceHandle : SafeHandle
+        {
+            public InstanceHandle() : base(IntPtr.Zero, true)
             {
             }
 
@@ -85,9 +100,9 @@ namespace Wasmtime
             }
         }
 
-        internal class WasmtimeFuncTypeHandle : SafeHandle
+        internal class FuncTypeHandle : SafeHandle
         {
-            public WasmtimeFuncTypeHandle() : base(IntPtr.Zero, true)
+            public FuncTypeHandle() : base(IntPtr.Zero, true)
             {
             }
 
@@ -100,9 +115,24 @@ namespace Wasmtime
             }
         }
 
-        internal class WasmtimeValueTypeHandle : SafeHandle
+        internal class GlobalTypeHandle : SafeHandle
         {
-            public WasmtimeValueTypeHandle() : base(IntPtr.Zero, true)
+            public GlobalTypeHandle() : base(IntPtr.Zero, true)
+            {
+            }
+
+            public override bool IsInvalid => handle == IntPtr.Zero;
+
+            protected override bool ReleaseHandle()
+            {
+                Interop.wasm_globaltype_delete(handle);
+                return true;
+            }
+        }
+
+        internal class ValueTypeHandle : SafeHandle
+        {
+            public ValueTypeHandle() : base(IntPtr.Zero, true)
             {
             }
 
@@ -201,29 +231,29 @@ namespace Wasmtime
             public uint max;
         }
 
-        internal static wasm_val_t ToValue(object o)
+        internal static wasm_val_t ToValue(object o, ValueKind kind)
         {
             wasm_val_t value = new wasm_val_t();
-            switch (o)
+            switch (kind)
             {
-                case int i:
+                case ValueKind.Int32:
                     value.kind = wasm_valkind_t.WASM_I32;
-                    value.of.i32 = i;
+                    value.of.i32 = (int)Convert.ChangeType(o, TypeCode.Int32);
                     break;
 
-                case long i:
+                case ValueKind.Int64:
                     value.kind = wasm_valkind_t.WASM_I64;
-                    value.of.i64 = i;
+                    value.of.i64 = (long)Convert.ChangeType(o, TypeCode.Int64);
                     break;
 
-                case float f:
+                case ValueKind.Float32:
                     value.kind = wasm_valkind_t.WASM_F32;
-                    value.of.f32 = f;
+                    value.of.f32 = (float)Convert.ChangeType(o, TypeCode.Single);
                     break;
 
-                case double d:
+                case ValueKind.Float64:
                     value.kind = wasm_valkind_t.WASM_F64;
-                    value.of.f64 = d;
+                    value.of.f64 = (double)Convert.ChangeType(o, TypeCode.Double);
                     break;
 
                 // TODO: support AnyRef
@@ -234,23 +264,84 @@ namespace Wasmtime
             return value;
         }
 
-        internal static object ToObject(wasm_val_t v)
+        internal static unsafe object ToObject(wasm_val_t* v)
         {
-            switch (v.kind)
+            switch (v->kind)
             {
                 case Interop.wasm_valkind_t.WASM_I32:
-                    return v.of.i32;
+                    return v->of.i32;
 
                 case Interop.wasm_valkind_t.WASM_I64:
-                    return v.of.i64;
+                    return v->of.i64;
 
                 case Interop.wasm_valkind_t.WASM_F32:
-                    return v.of.f32;
+                    return v->of.f32;
 
                 case Interop.wasm_valkind_t.WASM_F64:
-                    return v.of.f64;
+                    return v->of.f64;
 
                 // TODO: support AnyRef
+
+                default:
+                    throw new NotSupportedException("Unsupported value kind.");
+            }
+        }
+
+        public static bool TryGetValueKind(Type type, out ValueKind kind)
+        {
+            if (type == typeof(int))
+            {
+                kind = ValueKind.Int32;
+                return true;
+            }
+
+            if (type == typeof(long))
+            {
+                kind = ValueKind.Int64;
+                return true;
+            }
+
+            if (type == typeof(float))
+            {
+                kind = ValueKind.Float32;
+                return true;
+            }
+
+            if (type == typeof(double))
+            {
+                kind = ValueKind.Float64;
+                return true;
+            }
+
+            kind = default(ValueKind);
+            return false;
+        }
+
+        public static ValueKind ToValueKind(Type type)
+        {
+            if (TryGetValueKind(type, out var kind))
+            {
+                return kind;
+            }
+
+            throw new NotSupportedException("Type is expected to be 'int', 'long', 'float', or 'double'.");
+        }
+
+        public static string ToString(ValueKind kind)
+        {
+            switch (kind)
+            {
+                case ValueKind.Int32:
+                    return "int";
+
+                case ValueKind.Int64:
+                    return "long";
+
+                case ValueKind.Float32:
+                    return "float";
+
+                case ValueKind.Float64:
+                    return "double";
 
                 default:
                     throw new NotSupportedException("Unsupported value kind.");
@@ -293,7 +384,7 @@ namespace Wasmtime
             int i = 0;
             foreach (var type in collection)
             {
-                var valType = Interop.wasm_valtype_new(type);
+                var valType = Interop.wasm_valtype_new((wasm_valkind_t)type);
                 unsafe
                 {
                     vec.data[i++] = valType.DangerousGetHandle();
@@ -307,7 +398,7 @@ namespace Wasmtime
         // Engine imports
 
         [DllImport("wasmtime_api")]
-        public static extern WasmtimeEngineHandle wasm_engine_new();
+        public static extern EngineHandle wasm_engine_new();
 
         [DllImport("wasmtime_api")]
         public static extern void wasm_engine_delete(IntPtr engine);
@@ -315,7 +406,7 @@ namespace Wasmtime
         // Store imports
 
         [DllImport("wasmtime_api")]
-        public static extern WasmtimeStoreHandle wasm_store_new(WasmtimeEngineHandle engine);
+        public static extern StoreHandle wasm_store_new(EngineHandle engine);
 
         [DllImport("wasmtime_api")]
         public static extern void wasm_store_delete(IntPtr engine);
@@ -427,13 +518,13 @@ namespace Wasmtime
         // Module imports
 
         [DllImport("wasmtime_api")]
-        public static extern WasmtimeModuleHandle wasm_module_new(WasmtimeStoreHandle store, ref wasm_byte_vec_t bytes);
+        public static extern ModuleHandle wasm_module_new(StoreHandle store, ref wasm_byte_vec_t bytes);
 
         [DllImport("wasmtime_api")]
-        public static extern void wasm_module_imports(WasmtimeModuleHandle module, out wasm_importtype_vec_t imports);
+        public static extern void wasm_module_imports(ModuleHandle module, out wasm_importtype_vec_t imports);
 
         [DllImport("wasmtime_api")]
-        public static extern void wasm_module_exports(WasmtimeModuleHandle module, out wasm_exporttype_vec_t exports);
+        public static extern void wasm_module_exports(ModuleHandle module, out wasm_exporttype_vec_t exports);
 
         [DllImport("wasmtime_api")]
         public static extern void wasm_module_delete(IntPtr module);
@@ -441,7 +532,7 @@ namespace Wasmtime
         // Value type imports
 
         [DllImport("wasmtime_api")]
-        public static extern WasmtimeValueTypeHandle wasm_valtype_new(ValueKind kind);
+        public static extern ValueTypeHandle wasm_valtype_new(wasm_valkind_t kind);
 
         [DllImport("wasmtime_api")]
         public static extern void wasm_valtype_delete(IntPtr valueType);
@@ -489,7 +580,7 @@ namespace Wasmtime
         // Function imports
 
         [DllImport("wasmtime_api")]
-        public static extern WasmtimeFunctionHandle wasm_func_new(WasmtimeStoreHandle store, WasmtimeFuncTypeHandle type, WasmFuncCallback callback);
+        public static extern FunctionHandle wasm_func_new(StoreHandle store, FuncTypeHandle type, WasmFuncCallback callback);
 
         [DllImport("wasmtime_api")]
         public static extern void wasm_func_delete(IntPtr function);
@@ -498,7 +589,10 @@ namespace Wasmtime
         public static unsafe extern IntPtr wasm_func_call(IntPtr function, wasm_val_t* args, wasm_val_t* results);
 
         [DllImport("wasmtime_api")]
-        public static extern IntPtr wasm_func_as_extern(WasmtimeFunctionHandle function);
+        public static extern IntPtr wasm_func_as_extern(FunctionHandle function);
+
+        [DllImport("wasmtime_api")]
+        public static extern IntPtr wasm_global_as_extern(GlobalHandle global);
 
         // Function type imports
 
@@ -511,23 +605,29 @@ namespace Wasmtime
         // Instance imports
 
         [DllImport("wasmtime_api")]
-        public static extern unsafe WasmtimeInstanceHandle wasm_instance_new(WasmtimeStoreHandle store, WasmtimeModuleHandle module, IntPtr[] imports, out IntPtr trap);
+        public static extern unsafe InstanceHandle wasm_instance_new(StoreHandle store, ModuleHandle module, IntPtr[] imports, out IntPtr trap);
 
         [DllImport("wasmtime_api")]
         public static extern void wasm_instance_delete(IntPtr ext);
 
         [DllImport("wasmtime_api")]
-        public static extern void wasm_instance_exports(WasmtimeInstanceHandle instance, out wasm_extern_vec_t exports);
+        public static extern void wasm_instance_exports(InstanceHandle instance, out wasm_extern_vec_t exports);
 
         // Function type imports
 
         [DllImport("wasmtime_api")]
-        public static extern WasmtimeFuncTypeHandle wasm_functype_new(ref wasm_valtype_vec_t parameters, ref wasm_valtype_vec_t results);
+        public static extern FuncTypeHandle wasm_functype_new(ref wasm_valtype_vec_t parameters, ref wasm_valtype_vec_t results);
 
         [DllImport("wasmtime_api")]
         public static extern void wasm_functype_delete(IntPtr functype);
 
         // Global type imports
+
+        [DllImport("wasmtime_api")]
+        public static extern GlobalTypeHandle wasm_globaltype_new(IntPtr valueType, wasm_mutability_t mutability);
+
+        [DllImport("wasmtime_api")]
+        public static extern IntPtr wasm_globaltype_delete(IntPtr globalType);
 
         [DllImport("wasmtime_api")]
         public static extern IntPtr wasm_globaltype_content(IntPtr globalType);
@@ -538,7 +638,7 @@ namespace Wasmtime
         // Trap imports
 
         [DllImport("wasmtime_api")]
-        public static extern IntPtr wasm_trap_new(WasmtimeStoreHandle store, ref wasm_byte_vec_t message);
+        public static extern IntPtr wasm_trap_new(StoreHandle store, ref wasm_byte_vec_t message);
 
         [DllImport("wasmtime_api")]
         public static extern void wasm_trap_delete(IntPtr trap);
@@ -558,5 +658,22 @@ namespace Wasmtime
 
         [DllImport("wasmtime_api")]
         public static unsafe extern wasm_limits_t* wasm_memorytype_limits(IntPtr memoryType);
+
+        // Global imports
+
+        [DllImport("wasmtime_api")]
+        public static unsafe extern GlobalHandle wasm_global_new(StoreHandle handle, GlobalTypeHandle globalType, wasm_val_t* initialValue);
+
+        [DllImport("wasmtime_api")]
+        public static extern void wasm_global_delete(IntPtr global);
+
+        [DllImport("wasmtime_api")]
+        public static extern IntPtr wasm_global_type(IntPtr global);
+
+        [DllImport("wasmtime_api")]
+        public static unsafe extern void wasm_global_get(IntPtr global, wasm_val_t* value);
+
+        [DllImport("wasmtime_api")]
+        public static unsafe extern void wasm_global_set(IntPtr global, wasm_val_t* value);
     }
 }

@@ -23,7 +23,7 @@ namespace Wasmtime
         /// </summary>
         /// <param name="name">The name of the module.</param>
         /// <param name="bytes">The bytes of the module.</param>
-        /// <returns>Returns a new <see href="Module"/>.</returns>
+        /// <returns>Retuw <see href="Module"/>.</returns>
         public Module CreateModule(string name, byte[] bytes)
         {
             if (string.IsNullOrEmpty(name))
@@ -70,6 +70,6 @@ namespace Wasmtime
             }
         }
 
-        internal Interop.WasmtimeStoreHandle Handle { get; private set; }
+        internal Interop.StoreHandle Handle { get; private set; }
     }
 }

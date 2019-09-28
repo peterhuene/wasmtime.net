@@ -23,7 +23,7 @@ namespace Wasmtime
         /// <summary>
         /// Creates a new Wasmtime <see href="Store" />.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Returns the new <see href="Store" />.</returns>
         public Store CreateStore()
         {
             return new Store(this);
@@ -39,6 +39,6 @@ namespace Wasmtime
             }
         }
 
-        internal Interop.WasmtimeEngineHandle Handle { get; private set; }
+        internal Interop.EngineHandle Handle { get; private set; }
     }
 }

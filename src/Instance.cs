@@ -16,9 +16,10 @@ namespace Wasmtime
     {
         internal Instance(Module module, Host host)
         {
+            Host = host;
             Module = module;
 
-            var bindings = BindImports(host);
+            var bindings = BindImports();
 
             unsafe
             {
@@ -33,7 +34,11 @@ namespace Wasmtime
                     throw TrapException.FromOwnedTrap(trap);
                 }
 
-                bindings.ForEach(f => f.Dispose());
+                // Dispose of all function handles (not needed at runtime)
+                foreach (var b in bindings.Where(b => b is Interop.FunctionHandle))
+                {
+                    b.Dispose();
+                }
             }
 
             if (Handle.IsInvalid)
@@ -46,7 +51,14 @@ namespace Wasmtime
             Externs = new Externs(Module.Exports, _externs);
 
             _functions = Externs.Functions.ToDictionary(f => f.Name);
+            _globals = Externs.Globals.ToDictionary(g => g.Name);
         }
+
+        /// <summary>
+        /// The host associated with this instance.
+        /// </summary>
+        /// <value></value>
+        public Host Host { get; private set; }
 
         /// <summary>
         /// The WebAssembly module associated with the instantiation.
@@ -76,13 +88,24 @@ namespace Wasmtime
         /// <inheritdoc/>
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
-            throw new NotImplementedException();
+            if (_globals.TryGetValue(binder.Name, out var global))
+            {
+                result = global.Value;
+                return true;
+            }
+            result = null;
+            return false;
         }
 
         /// <inheritdoc/>
         public override bool TrySetMember(SetMemberBinder binder, object value)
         {
-            throw new NotImplementedException();
+            if (_globals.TryGetValue(binder.Name, out var global))
+            {
+                global.Value = value;
+                return true;
+            }
+            return false;
         }
 
         /// <inheritdoc/>
@@ -98,12 +121,12 @@ namespace Wasmtime
             return true;
         }
 
-        private List<SafeHandle> BindImports(Host host)
+        private List<SafeHandle> BindImports()
         {
-            var type = host.GetType();
-            var methods = type
-                .GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly)
-                .Where(m => !m.IsSpecialName);
+            var flags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly;
+            var type = Host.GetType();
+            var methods = type.GetMethods(flags).Where(m => !m.IsSpecialName);
+            var fields = type.GetFields(flags).Where(f => !f.IsSpecialName);
 
             var bindings = new List<SafeHandle>();
             foreach (var import in Module.Imports.All)
@@ -111,7 +134,11 @@ namespace Wasmtime
                 switch (import)
                 {
                     case FunctionImport f:
-                        bindings.Add(BindImportFunction(host, methods, f));
+                        bindings.Add(BindImportFunction(methods, f));
+                        break;
+
+                    case GlobalImport g:
+                        bindings.Add(BindGlobal(fields, g));
                         break;
 
                     default:
@@ -121,7 +148,7 @@ namespace Wasmtime
             return bindings;
         }
 
-        private Interop.WasmtimeFunctionHandle BindImportFunction(Host host, IEnumerable<MethodInfo> methods, FunctionImport import)
+        private Interop.FunctionHandle BindImportFunction(IEnumerable<MethodInfo> methods, FunctionImport import)
         {
             var method = methods.Where(m =>
             {
@@ -139,12 +166,12 @@ namespace Wasmtime
 
             if (method == null)
             {
-                throw new WasmtimeException($"Failed to instantiate module '{Module.Name}': missing import '{import}'.");
+                throw new WasmtimeException($"Failed to instantiate module '{Module.Name}': missing function import '{import}'.");
             }
 
             ValidateImportFunction(import, method);
 
-            var callback = RegisterCallback(host, method, import.Parameters.Count);
+            var callback = RegisterCallback(method, import.Parameters.Count);
 
             unsafe
             {
@@ -157,9 +184,39 @@ namespace Wasmtime
             }
         }
 
-        private static void ThrowBindingException(FunctionImport import, MethodInfo method, string message)
+        private SafeHandle BindGlobal(IEnumerable<FieldInfo> fields, GlobalImport import)
         {
-            throw new WasmtimeException($"Unable to bind method '{method.DeclaringType.Name}.{method.Name}' to WebAssembly import '{import}': {message}.");
+            var global = fields.Where(f =>
+            {
+                var attribute = (ImportAttribute)f.GetCustomAttribute(typeof(ImportAttribute));
+                if (attribute == null)
+                {
+                    return false;
+                }
+
+                return attribute.Name == import.Name &&
+                        ((string.IsNullOrEmpty(attribute.Module) &&
+                        string.IsNullOrEmpty(import.ModuleName)) ||
+                        attribute.Module == import.ModuleName);
+            }).FirstOrDefault();
+
+            if (global == null)
+            {
+                throw new WasmtimeException($"Failed to instantiate module '{Module.Name}': missing global import '{import}'.");
+            }
+
+            ValidateImportGlobal(import, global);
+
+            var g = (dynamic)global.GetValue(Host);
+
+            g.InitializeHandle(Module.Store.Handle);
+
+            return g.Handle;
+        }
+
+        private static void ThrowBindingException(Import import, MemberInfo member, string message)
+        {
+            throw new WasmtimeException($"Unable to bind '{member.DeclaringType.Name}.{member.Name}' to WebAssembly import '{import}': {message}.");
         }
 
         private static void ValidateImportFunction(FunctionImport import, MethodInfo method)
@@ -182,6 +239,42 @@ namespace Wasmtime
             ValidateParameters(import, method);
 
             ValidateReturnType(import, method);
+        }
+
+        private void ValidateImportGlobal(GlobalImport import, FieldInfo global)
+        {
+            if (global.IsStatic)
+            {
+                ThrowBindingException(import, global, "field cannot be static");
+            }
+
+            if (!global.IsInitOnly)
+            {
+                ThrowBindingException(import, global, "field must be readonly");
+            }
+
+            if (!global.FieldType.IsGenericType || global.FieldType.GetGenericTypeDefinition() != typeof(Global<>))
+            {
+                ThrowBindingException(import, global, "field is expected to be of type 'Global<T>'");
+            }
+
+            var g = (dynamic)global.GetValue(Host);
+
+            if (import.Kind != g.Kind)
+            {
+               ThrowBindingException(import, global, $"global type argument is expected to be of type '{Interop.ToString(import.Kind)}'");
+            }
+
+            var isMutable = g.IsMutable;
+
+            if (import.IsMutable && !isMutable)
+            {
+                ThrowBindingException(import, global, "global is expected to be mutable");
+            }
+            else if (!import.IsMutable && isMutable)
+            {
+                ThrowBindingException(import, global, "global is expected to be immutable");
+            }
         }
 
         private static void ValidateParameters(FunctionImport import, MethodInfo method)
@@ -211,9 +304,9 @@ namespace Wasmtime
                 }
 
                 var expected = import.Parameters[i];
-                if (!TryGetValueKind(parameter.ParameterType, out var kind) || kind != expected)
+                if (!Interop.TryGetValueKind(parameter.ParameterType, out var kind) || kind != expected)
                 {
-                    ThrowBindingException(import, method, $"method parameter '{parameter.Name}' is expected to be of type '{ToString(expected)}'");
+                    ThrowBindingException(import, method, $"method parameter '{parameter.Name}' is expected to be of type '{Interop.ToString(expected)}'");
                 }
             }
         }
@@ -231,9 +324,9 @@ namespace Wasmtime
             else if (resultsCount == 1)
             {
                 var expected = import.Results[0];
-                if (!TryGetValueKind(method.ReturnType, out var kind) || kind != expected)
+                if (!Interop.TryGetValueKind(method.ReturnType, out var kind) || kind != expected)
                 {
-                    ThrowBindingException(import, method, $"return type is expected to be '{ToString(expected)}'");
+                    ThrowBindingException(import, method, $"return type is expected to be '{Interop.ToString(expected)}'");
                 }
             }
             else
@@ -257,9 +350,9 @@ namespace Wasmtime
                 foreach (var typeArgument in typeArguments)
                 {
                     var expected = import.Results[i];
-                    if (!TryGetValueKind(typeArgument, out var kind) || kind != expected)
+                    if (!Interop.TryGetValueKind(typeArgument, out var kind) || kind != expected)
                     {
-                        ThrowBindingException(import, method, $"return tuple item #{i} is expected to be of type '{ToString(expected)}'");
+                        ThrowBindingException(import, method, $"return tuple item #{i} is expected to be of type '{Interop.ToString(expected)}'");
                     }
 
                     ++i;
@@ -267,10 +360,11 @@ namespace Wasmtime
             }
         }
 
-        private unsafe Interop.WasmFuncCallback RegisterCallback(Host host, MethodInfo method, int argCount)
+        private unsafe Interop.WasmFuncCallback RegisterCallback(MethodInfo method, int argCount)
         {
             var args = new object[argCount];
             bool hasReturn = method.ReturnType != typeof(void);
+            var host = Host;
             var store = Module.Store.Handle;
 
             Interop.WasmFuncCallback callback = (arguments, results) =>
@@ -385,62 +479,14 @@ namespace Wasmtime
         {
             switch (handle)
             {
-                case Interop.WasmtimeFunctionHandle f:
+                case Interop.FunctionHandle f:
                     return Interop.wasm_func_as_extern(f);
+
+                case Interop.GlobalHandle g:
+                    return Interop.wasm_global_as_extern(g);
 
                 default:
                     throw new NotSupportedException("Unexpected handle type.");
-            }
-        }
-
-        private static bool TryGetValueKind(Type type, out ValueKind kind)
-        {
-            if (type == typeof(int))
-            {
-                kind = ValueKind.Int32;
-                return true;
-            }
-
-            if (type == typeof(long))
-            {
-                kind = ValueKind.Int64;
-                return true;
-            }
-
-            if (type == typeof(float))
-            {
-                kind = ValueKind.Float32;
-                return true;
-            }
-
-            if (type == typeof(double))
-            {
-                kind = ValueKind.Float64;
-                return true;
-            }
-
-            kind = default(ValueKind);
-            return false;
-        }
-
-        private static string ToString(ValueKind kind)
-        {
-            switch (kind)
-            {
-                case ValueKind.Int32:
-                    return "int";
-
-                case ValueKind.Int64:
-                    return "long";
-
-                case ValueKind.Float32:
-                    return "float";
-
-                case ValueKind.Float64:
-                    return "double";
-
-                default:
-                    throw new NotSupportedException("Unsupported value kind.");
             }
         }
 
@@ -501,9 +547,10 @@ namespace Wasmtime
             return IsTupleOfSize(type.GetGenericArguments().Last(), size - 7);
         }
 
-        internal Interop.WasmtimeInstanceHandle Handle { get; private set; }
+        internal Interop.InstanceHandle Handle { get; private set; }
         private List<Interop.WasmFuncCallback> _callbacks = new List<Interop.WasmFuncCallback>();
         private Interop.wasm_extern_vec_t _externs;
         private Dictionary<string, ExternFunction> _functions;
+        private Dictionary<string, ExternGlobal> _globals;
     }
 }

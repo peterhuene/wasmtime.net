@@ -52,7 +52,7 @@ namespace Wasmtime
 
                 for (int i = 0; i < arguments.Length; ++i)
                 {
-                    args[i] = Interop.ToValue(arguments[i]);
+                    args[i] = Interop.ToValue(arguments[i], Parameters[i]);
                 }
 
                 var trap = Interop.wasm_func_call(_func, args, results);
@@ -68,13 +68,13 @@ namespace Wasmtime
 
                 if (Results.Count == 1)
                 {
-                    return Interop.ToObject(results[0]);
+                    return Interop.ToObject(&results[0]);
                 }
 
                 var ret = new object[Results.Count];
                 for (int i = 0; i < Results.Count; ++i)
                 {
-                    ret[i] = Interop.ToObject(results[i]);
+                    ret[i] = Interop.ToObject(&results[i]);
                 }
                 return ret;
             }

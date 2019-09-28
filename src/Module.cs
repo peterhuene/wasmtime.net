@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 namespace Wasmtime
@@ -88,6 +89,6 @@ namespace Wasmtime
             }
         }
 
-        internal Interop.WasmtimeModuleHandle Handle { get; private set; }
+        internal Interop.ModuleHandle Handle { get; private set; }
     }
 }
