@@ -39,11 +39,11 @@ TODO: add this section
 | Module table exports                  | ✅     |
 | Module memory exports                 | ✅     |
 | Extern instance functions             | ✅     |
-| Extern instance globals               | ⬜️     |
+| Extern instance globals               | ✅️     |
 | Extern instance tables                | ⬜️     |
 | Extern instance memories              | ⬜️     |
 | Host function import binding          | ✅     |
-| Host global import binding            | ⬜️ ️️    |
+| Host global import binding            | ✅ ️️    |
 | Host table import binding             | ⬜️ ️️    |
 | Host memory import binding            | ⬜️ ️️    |
 | `i32` parameters and return values    | ✅     |
