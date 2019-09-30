@@ -48,7 +48,7 @@ namespace Wasmtime
         /// Instantiates a WebAssembly module for the given host.
         /// </summary>
         /// <param name="host">The host to use for the WebAssembly module's instance.</param>
-        /// <returns>Returns a new <see href="Instance" />.</returns>
+        /// <returns>Returns a new <see cref="Instance" />.</returns>
         public Instance Instantiate(IHost host)
         {
             if (host == null)
@@ -66,7 +66,7 @@ namespace Wasmtime
         }
 
         /// <summary>
-        /// The <see href="Store"/> associated with the module.
+        /// The <see cref="Store"/> associated with the module.
         /// </summary>
         public Store Store { get; private set; }
 

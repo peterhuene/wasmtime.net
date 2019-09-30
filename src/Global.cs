@@ -8,7 +8,7 @@ namespace Wasmtime
     public class Global<T>
     {
         /// <summary>
-        /// Creates a new <see href="Global" /> with the given initial value.
+        /// Creates a new <see cref="Global&lt;T&gt;" /> with the given initial value.
         /// </summary>
         /// <param name="initialValue">The initial value of the global.</param>
         public Global(T initialValue)

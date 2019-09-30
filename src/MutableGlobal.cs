@@ -8,7 +8,7 @@ namespace Wasmtime
     public class MutableGlobal<T>
     {
         /// <summary>
-        /// Creates a new <see href="MutableGlobal" /> with the given initial value.
+        /// Creates a new <see cref="MutableGlobal&lt;T&gt;" /> with the given initial value.
         /// </summary>
         /// <param name="initialValue">The initial value of the global.</param>
         public MutableGlobal(T initialValue)

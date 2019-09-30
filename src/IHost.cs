@@ -10,7 +10,7 @@ namespace Wasmtime
     public interface IHost
     {
         /// <summary>
-        /// The <see href="Instance" /> that the host is bound to.
+        /// The <see cref="Wasmtime.Instance" /> that the host is bound to.
         /// </summary>
         /// <remarks>A host can only bind to one module instance at a time.</remarks>
         Instance Instance { get; set; }

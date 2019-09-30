@@ -8,7 +8,7 @@ namespace Wasmtime
     public class Engine : IDisposable
     {
         /// <summary>
-        /// Constructs a new <see href="Engine" />.
+        /// Constructs a new <see cref="Engine" />.
         /// </summary>
         public Engine()
         {
@@ -21,9 +21,9 @@ namespace Wasmtime
         }
 
         /// <summary>
-        /// Creates a new Wasmtime <see href="Store" />.
+        /// Creates a new Wasmtime <see cref="Store" />.
         /// </summary>
-        /// <returns>Returns the new <see href="Store" />.</returns>
+        /// <returns>Returns the new <see cref="Store" />.</returns>
         public Store CreateStore()
         {
             return new Store(this);
