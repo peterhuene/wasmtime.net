@@ -1,11 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Runtime.CompilerServices;
 using System.Dynamic;
-using System.Text;
 
 namespace Wasmtime
 {
@@ -14,36 +11,37 @@ namespace Wasmtime
     /// </summary>
     public class Instance : DynamicObject, IDisposable
     {
-        internal Instance(Module module, Host host)
+        internal Instance(Module module, IHost host)
         {
             Host = host;
             Module = module;
 
-            var bindings = BindImports();
+            var bindings = host.GetImportBindings(module);
+            var handles = bindings.Select(b => b.Bind(module.Store, host)).ToList();
 
             unsafe
             {
                 Handle = Interop.wasm_instance_new(
                     Module.Store.Handle,
                     Module.Handle,
-                    bindings.Select(b => ToExtern(b)).ToArray(),
+                    handles.Select(h => ToExtern(h)).ToArray(),
                     out var trap);
 
                 if (trap != IntPtr.Zero)
                 {
                     throw TrapException.FromOwnedTrap(trap);
                 }
-
-                // Dispose of all function handles (not needed at runtime)
-                foreach (var b in bindings.Where(b => b is Interop.FunctionHandle))
-                {
-                    b.Dispose();
-                }
             }
 
             if (Handle.IsInvalid)
             {
                 throw new WasmtimeException($"Failed to instantiate module '{module.Name}'.");
+            }
+
+            // Dispose of all function handles (not needed at runtime)
+            foreach (var h in handles.Where(h => h is Interop.FunctionHandle))
+            {
+                h.Dispose();
             }
 
             Interop.wasm_instance_exports(Handle, out _externs);
@@ -57,8 +55,7 @@ namespace Wasmtime
         /// <summary>
         /// The host associated with this instance.
         /// </summary>
-        /// <value></value>
-        public Host Host { get; private set; }
+        public IHost Host { get; private set; }
 
         /// <summary>
         /// The WebAssembly module associated with the instantiation.
@@ -121,360 +118,6 @@ namespace Wasmtime
             return true;
         }
 
-        private List<SafeHandle> BindImports()
-        {
-            var flags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly;
-            var type = Host.GetType();
-            var methods = type.GetMethods(flags).Where(m => !m.IsSpecialName);
-            var fields = type.GetFields(flags).Where(f => !f.IsSpecialName);
-
-            var bindings = new List<SafeHandle>();
-            foreach (var import in Module.Imports.All)
-            {
-                switch (import)
-                {
-                    case FunctionImport f:
-                        bindings.Add(BindImportFunction(methods, f));
-                        break;
-
-                    case GlobalImport g:
-                        bindings.Add(BindGlobal(fields, g));
-                        break;
-
-                    default:
-                        throw new NotSupportedException("Unsupported import binding type.");
-                }
-            }
-            return bindings;
-        }
-
-        private Interop.FunctionHandle BindImportFunction(IEnumerable<MethodInfo> methods, FunctionImport import)
-        {
-            var method = methods.Where(m =>
-            {
-                var attribute = (ImportAttribute)m.GetCustomAttribute(typeof(ImportAttribute));
-                if (attribute == null)
-                {
-                    return false;
-                }
-
-                return attribute.Name == import.Name &&
-                        ((string.IsNullOrEmpty(attribute.Module) &&
-                        string.IsNullOrEmpty(import.ModuleName)) ||
-                        attribute.Module == import.ModuleName);
-            }).FirstOrDefault();
-
-            if (method == null)
-            {
-                throw new WasmtimeException($"Failed to instantiate module '{Module.Name}': missing function import '{import}'.");
-            }
-
-            ValidateImportFunction(import, method);
-
-            var callback = RegisterCallback(method, import.Parameters.Count);
-
-            unsafe
-            {
-                var parameters = Interop.ToValueTypeVec(import.Parameters);
-                var results = Interop.ToValueTypeVec(import.Results);
-                using (var funcType = Interop.wasm_functype_new(ref parameters, ref results))
-                {
-                    return Interop.wasm_func_new(Module.Store.Handle, funcType, callback);
-                }
-            }
-        }
-
-        private SafeHandle BindGlobal(IEnumerable<FieldInfo> fields, GlobalImport import)
-        {
-            var global = fields.Where(f =>
-            {
-                var attribute = (ImportAttribute)f.GetCustomAttribute(typeof(ImportAttribute));
-                if (attribute == null)
-                {
-                    return false;
-                }
-
-                return attribute.Name == import.Name &&
-                        ((string.IsNullOrEmpty(attribute.Module) &&
-                        string.IsNullOrEmpty(import.ModuleName)) ||
-                        attribute.Module == import.ModuleName);
-            }).FirstOrDefault();
-
-            if (global == null)
-            {
-                throw new WasmtimeException($"Failed to instantiate module '{Module.Name}': missing global import '{import}'.");
-            }
-
-            ValidateImportGlobal(import, global);
-
-            var g = (dynamic)global.GetValue(Host);
-
-            g.InitializeHandle(Module.Store.Handle);
-
-            return g.Handle;
-        }
-
-        private static void ThrowBindingException(Import import, MemberInfo member, string message)
-        {
-            throw new WasmtimeException($"Unable to bind '{member.DeclaringType.Name}.{member.Name}' to WebAssembly import '{import}': {message}.");
-        }
-
-        private static void ValidateImportFunction(FunctionImport import, MethodInfo method)
-        {
-            if (method.IsStatic)
-            {
-                ThrowBindingException(import, method, "method cannot be static");
-            }
-
-            if (method.IsGenericMethod)
-            {
-                ThrowBindingException(import, method, "method cannot be generic");
-            }
-
-            if (method.IsConstructor)
-            {
-                ThrowBindingException(import, method, "method cannot be a constructor");
-            }
-
-            ValidateParameters(import, method);
-
-            ValidateReturnType(import, method);
-        }
-
-        private void ValidateImportGlobal(GlobalImport import, FieldInfo global)
-        {
-            if (global.IsStatic)
-            {
-                ThrowBindingException(import, global, "field cannot be static");
-            }
-
-            if (!global.IsInitOnly)
-            {
-                ThrowBindingException(import, global, "field must be readonly");
-            }
-
-            if (!global.FieldType.IsGenericType || global.FieldType.GetGenericTypeDefinition() != typeof(Global<>))
-            {
-                ThrowBindingException(import, global, "field is expected to be of type 'Global<T>'");
-            }
-
-            var g = (dynamic)global.GetValue(Host);
-
-            if (import.Kind != g.Kind)
-            {
-               ThrowBindingException(import, global, $"global type argument is expected to be of type '{Interop.ToString(import.Kind)}'");
-            }
-
-            var isMutable = g.IsMutable;
-
-            if (import.IsMutable && !isMutable)
-            {
-                ThrowBindingException(import, global, "global is expected to be mutable");
-            }
-            else if (!import.IsMutable && isMutable)
-            {
-                ThrowBindingException(import, global, "global is expected to be immutable");
-            }
-        }
-
-        private static void ValidateParameters(FunctionImport import, MethodInfo method)
-        {
-            var parameters = method.GetParameters();
-            if (parameters.Length != import.Parameters.Count)
-            {
-                ThrowBindingException(
-                    import,
-                    method,
-                    $"parameter mismatch: import requires {import.Parameters.Count} but the method has {parameters.Length}");
-            }
-
-            for (int i = 0; i < parameters.Length; ++i)
-            {
-                var parameter = parameters[i];
-                if (parameter.ParameterType.IsByRef)
-                {
-                    if (parameter.IsOut)
-                    {
-                        ThrowBindingException(import, method, $"parameter '{parameter.Name}' cannot be an 'out' parameter");
-                    }
-                    else
-                    {
-                        ThrowBindingException(import, method, $"parameter '{parameter.Name}' cannot be a 'ref' parameter");
-                    }
-                }
-
-                var expected = import.Parameters[i];
-                if (!Interop.TryGetValueKind(parameter.ParameterType, out var kind) || kind != expected)
-                {
-                    ThrowBindingException(import, method, $"method parameter '{parameter.Name}' is expected to be of type '{Interop.ToString(expected)}'");
-                }
-            }
-        }
-
-        private static void ValidateReturnType(FunctionImport import, MethodInfo method)
-        {
-            int resultsCount = import.Results.Count();
-            if (resultsCount == 0)
-            {
-                if (method.ReturnType != typeof(void))
-                {
-                    ThrowBindingException(import, method, "method must return void");
-                }
-            }
-            else if (resultsCount == 1)
-            {
-                var expected = import.Results[0];
-                if (!Interop.TryGetValueKind(method.ReturnType, out var kind) || kind != expected)
-                {
-                    ThrowBindingException(import, method, $"return type is expected to be '{Interop.ToString(expected)}'");
-                }
-            }
-            else
-            {
-                if (!IsTupleOfSize(method.ReturnType, resultsCount))
-                {
-                    ThrowBindingException(import, method, $"return type is expected to be a tuple of size {resultsCount}");
-                }
-
-                var typeArguments =
-                    method.ReturnType.GetGenericArguments().SelectMany(type =>
-                    {
-                        if (type.IsConstructedGenericType)
-                        {
-                            return type.GenericTypeArguments;
-                        }
-                        return Enumerable.Repeat(type, 1);
-                    });
-
-                int i = 0;
-                foreach (var typeArgument in typeArguments)
-                {
-                    var expected = import.Results[i];
-                    if (!Interop.TryGetValueKind(typeArgument, out var kind) || kind != expected)
-                    {
-                        ThrowBindingException(import, method, $"return tuple item #{i} is expected to be of type '{Interop.ToString(expected)}'");
-                    }
-
-                    ++i;
-                }
-            }
-        }
-
-        private unsafe Interop.WasmFuncCallback RegisterCallback(MethodInfo method, int argCount)
-        {
-            var args = new object[argCount];
-            bool hasReturn = method.ReturnType != typeof(void);
-            var host = Host;
-            var store = Module.Store.Handle;
-
-            Interop.WasmFuncCallback callback = (arguments, results) =>
-            {
-                try
-                {
-                    SetArgs(arguments, args);
-
-                    var result = method.Invoke(host, args);
-
-                    if (hasReturn)
-                    {
-                        SetResults(result, results);
-                    }
-                    return IntPtr.Zero;
-                }
-                catch (TargetInvocationException ex)
-                {
-                    var bytes = Encoding.UTF8.GetBytes(ex.InnerException.Message + "\0" /* exception messages need a null */);
-
-                    fixed (byte* ptr = bytes)
-                    {
-                        Interop.wasm_byte_vec_t message = new Interop.wasm_byte_vec_t();
-                        message.size = (UIntPtr)bytes.Length;
-                        message.data = ptr;
-
-                        return Interop.wasm_trap_new(store, ref message);
-                    }
-                }
-            };
-
-            _callbacks.Add(callback);
-            return callback;
-        }
-
-        private static unsafe void SetArgs(Interop.wasm_val_t* arguments, object[] args)
-        {
-            for (int i = 0; i < args.Length; ++i)
-            {
-                var arg = arguments[i];
-
-                switch (arg.kind)
-                {
-                    case Interop.wasm_valkind_t.WASM_I32:
-                        args[i] = arg.of.i32;
-                        break;
-
-                    case Interop.wasm_valkind_t.WASM_I64:
-                        args[i] = arg.of.i64;
-                        break;
-
-                    case Interop.wasm_valkind_t.WASM_F32:
-                        args[i] = arg.of.f32;
-                        break;
-
-                    case Interop.wasm_valkind_t.WASM_F64:
-                        args[i] = arg.of.f64;
-                        break;
-
-                    default:
-                        throw new NotSupportedException("Unsupported value type.");
-                }
-            }
-        }
-
-        private static unsafe void SetResults(object value, Interop.wasm_val_t* results)
-        {
-            var tuple = value as ITuple;
-            if (tuple is null)
-            {
-                SetResult(value, &results[0]);
-            }
-            else
-            {
-                for (int i = 0; i < tuple.Length; ++i)
-                {
-                    SetResults(tuple[i], &results[i]);
-                }
-            }
-        }
-
-        private static unsafe void SetResult(object value, Interop.wasm_val_t* result)
-        {
-            switch (value)
-            {
-                case int i:
-                    result->kind = Interop.wasm_valkind_t.WASM_I32;
-                    result->of.i32 = i;
-                    break;
-
-                case long l:
-                    result->kind = Interop.wasm_valkind_t.WASM_I64;
-                    result->of.i64 = l;
-                    break;
-
-                case float f:
-                    result->kind = Interop.wasm_valkind_t.WASM_F32;
-                    result->of.f32 = f;
-                    break;
-
-                case double d:
-                    result->kind = Interop.wasm_valkind_t.WASM_F64;
-                    result->of.f64 = d;
-                    break;
-
-                default:
-                    throw new NotSupportedException("Unsupported return value type.");
-            }
-        }
-
         private static unsafe IntPtr ToExtern(SafeHandle handle)
         {
             switch (handle)
@@ -490,65 +133,7 @@ namespace Wasmtime
             }
         }
 
-        private static bool IsTupleOfSize(Type type, int size)
-        {
-            if (!type.IsConstructedGenericType)
-            {
-                return false;
-            }
-
-            var definition = type.GetGenericTypeDefinition();
-
-            if (size == 0)
-            {
-                return definition == typeof(ValueTuple);
-            }
-
-            if (size == 1)
-            {
-                return definition == typeof(ValueTuple<>);
-            }
-
-            if (size == 2)
-            {
-                return definition == typeof(ValueTuple<,>);
-            }
-
-            if (size == 3)
-            {
-                return definition == typeof(ValueTuple<,,>);
-            }
-
-            if (size == 4)
-            {
-                return definition == typeof(ValueTuple<,,,>);
-            }
-
-            if (size == 5)
-            {
-                return definition == typeof(ValueTuple<,,,,>);
-            }
-
-            if (size == 6)
-            {
-                return definition == typeof(ValueTuple<,,,,,>);
-            }
-
-            if (size == 7)
-            {
-                return definition == typeof(ValueTuple<,,,,,,>);
-            }
-
-            if (definition != typeof(ValueTuple<,,,,,,,>))
-            {
-                return false;
-            }
-
-            return IsTupleOfSize(type.GetGenericArguments().Last(), size - 7);
-        }
-
         internal Interop.InstanceHandle Handle { get; private set; }
-        private List<Interop.WasmFuncCallback> _callbacks = new List<Interop.WasmFuncCallback>();
         private Interop.wasm_extern_vec_t _externs;
         private Dictionary<string, ExternFunction> _functions;
         private Dictionary<string, ExternGlobal> _globals;

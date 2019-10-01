@@ -3,15 +3,15 @@ using System;
 namespace Wasmtime
 {
     /// <summary>
-    /// Represents a constant WebAssembly global value.
+    /// Represents a mutable WebAssembly global value.
     /// </summary>
-    public class Global<T>
+    public class MutableGlobal<T>
     {
         /// <summary>
-        /// Creates a new <see href="Global" /> with the given initial value.
+        /// Creates a new <see href="MutableGlobal" /> with the given initial value.
         /// </summary>
         /// <param name="initialValue">The initial value of the global.</param>
-        public Global(T initialValue)
+        public MutableGlobal(T initialValue)
         {
             InitialValue = initialValue;
             Kind = Interop.ToValueKind(typeof(T));
@@ -26,7 +26,7 @@ namespace Wasmtime
             {
                 if (Handle == null)
                 {
-                    throw new InvalidOperationException("The global cannot be used before it is bound to a module instance.");
+                    throw new InvalidOperationException("The global cannot be used before it is instantiated.");
                 }
 
                 unsafe
@@ -39,12 +39,27 @@ namespace Wasmtime
                     return (T)Interop.ToObject(v);
                 }
             }
+            set
+            {
+                if (Handle == null)
+                {
+                    throw new InvalidOperationException("The global cannot be used before it is instantiated.");
+                }
+
+                // TODO: figure out a way that doesn't box the value
+                var v = Interop.ToValue(value, Kind);
+
+                unsafe
+                {
+                    Interop.wasm_global_set(Handle.DangerousGetHandle(), &v);
+                }
+            }
         }
 
         internal ValueKind Kind { get; private set; }
 
         internal Interop.GlobalHandle Handle { get; set; }
 
-        public T InitialValue { get; private set; }
+        internal T InitialValue { get; private set; }
     }
 }

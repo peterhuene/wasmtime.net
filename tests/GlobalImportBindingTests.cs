@@ -16,77 +16,94 @@ namespace Wasmtime.Tests
 
     public class GlobalImportBindingTests : IClassFixture<GlobalImportBindingFixture>
     {
-        class NoImportsHost : Wasmtime.Host
+        class NoImportsHost : IHost
         {
+            public Instance Instance { get; set; }
         }
 
-        class GlobalIsStaticHost : Wasmtime.Host
+        class GlobalIsStaticHost : IHost
         {
+            public Instance Instance { get; set; }
+
             [Import("global_i32_mut")]
             public static int x = 0;
         }
 
-        class GlobalIsNotReadOnlyHost : Wasmtime.Host
+        class GlobalIsNotReadOnlyHost : IHost
         {
+            public Instance Instance { get; set; }
+
             [Import("global_i32_mut")]
             public int x = 0;
         }
 
-        class NotAGlobalHost : Wasmtime.Host
+        class NotAGlobalHost : IHost
         {
+            public Instance Instance { get; set; }
+
             [Import("global_i32_mut")]
             public readonly int x = 0;
         }
 
-        class NotAValidGlobalTypeHost : Wasmtime.Host
+        class NotAValidGlobalTypeHost : IHost
         {
+            public Instance Instance { get; set; }
+
             [Import("global_i32_mut")]
             public readonly Global<string> x = new Global<string>("nope");
         }
 
-        class TypeMismatchHost : Wasmtime.Host
+        class TypeMismatchHost : IHost
         {
+            public Instance Instance { get; set; }
+
             [Import("global_i32_mut")]
-            public readonly Global<long> x = new Global<long>(0);
+            public readonly MutableGlobal<long> x = new MutableGlobal<long>(0);
         }
 
-        class NotMutHost : Wasmtime.Host
+        class NotMutHost : IHost
         {
+            public Instance Instance { get; set; }
+
             [Import("global_i32_mut")]
             public readonly Global<int> Int32Mut = new Global<int>(0);
         }
 
-        class MutHost : Wasmtime.Host
+        class MutHost : IHost
         {
+            public Instance Instance { get; set; }
+
             [Import("global_i32_mut")]
-            public readonly Global<int> Int32Mut = new Global<int>(0, isMutable: true);
+            public readonly MutableGlobal<int> Int32Mut = new MutableGlobal<int>(0);
 
             [Import("global_i32")]
-            public readonly Global<int> Int32 = new Global<int>(0, isMutable: true);
+            public readonly MutableGlobal<int> Int32 = new MutableGlobal<int>(0);
         }
 
-        class ValidHost : Wasmtime.Host
+        class ValidHost : IHost
         {
+            public Instance Instance { get; set; }
+
             [Import("global_i32_mut")]
-            public readonly Global<int> Int32Mut = new Global<int>(0, isMutable: true);
+            public readonly MutableGlobal<int> Int32Mut = new MutableGlobal<int>(0);
 
             [Import("global_i32")]
             public readonly Global<int> Int32 = new Global<int>(1);
 
             [Import("global_i64_mut")]
-            public readonly Global<long> Int64Mut = new Global<long>(2, isMutable: true);
+            public readonly MutableGlobal<long> Int64Mut = new MutableGlobal<long>(2);
 
             [Import("global_i64")]
             public readonly Global<long> Int64 = new Global<long>(3);
 
             [Import("global_f32_mut")]
-            public readonly Global<float> Float32Mut = new Global<float>(4, isMutable: true);
+            public readonly MutableGlobal<float> Float32Mut = new MutableGlobal<float>(4);
 
             [Import("global_f32")]
             public readonly Global<float> Float32 = new Global<float>(5);
 
             [Import("global_f64_mut")]
-            public readonly Global<double> Float64Mut = new Global<double>(6, isMutable: true);
+            public readonly MutableGlobal<double> Float64Mut = new MutableGlobal<double>(6);
 
             [Import("global_f64")]
             public readonly Global<double> Float64 = new Global<double>(7);
@@ -102,18 +119,18 @@ namespace Wasmtime.Tests
         [Fact]
         public void ItFailsToInstantiateWithMissingImport()
         {
-            Action action = () => { using (var instance = Fixture.Module.Instantiate<NoImportsHost>()) { } };
+            Action action = () => { using (var instance = Fixture.Module.Instantiate(new NoImportsHost())) { } };
 
             action
                 .Should()
                 .Throw<WasmtimeException>()
-                .WithMessage("Failed to instantiate module 'GlobalImportBindings': missing global import *");
+                .WithMessage("Failed to bind global import 'global_i32_mut': the host does not contain a global field with a matching 'Import' attribute.");
         }
 
         [Fact]
         public void ItFailsToInstantiateWithStaticField()
         {
-            Action action = () => { using (var instance = Fixture.Module.Instantiate<GlobalIsStaticHost>()) { } };
+            Action action = () => { using (var instance = Fixture.Module.Instantiate(new GlobalIsStaticHost())) { } };
 
             action
                 .Should()
@@ -124,7 +141,7 @@ namespace Wasmtime.Tests
         [Fact]
         public void ItFailsToInstantiateWithNonReadOnlyField()
         {
-            Action action = () => { using (var instance = Fixture.Module.Instantiate<GlobalIsNotReadOnlyHost>()) { } };
+            Action action = () => { using (var instance = Fixture.Module.Instantiate(new GlobalIsNotReadOnlyHost())) { } };
 
             action
                 .Should()
@@ -135,7 +152,7 @@ namespace Wasmtime.Tests
         [Fact]
         public void ItFailsToInstantiateWithInvalidType()
         {
-            Action action = () => { using (var instance = Fixture.Module.Instantiate<NotAGlobalHost>()) { } };
+            Action action = () => { using (var instance = Fixture.Module.Instantiate(new NotAGlobalHost())) { } };
 
             action
                 .Should()
@@ -146,18 +163,17 @@ namespace Wasmtime.Tests
         [Fact]
         public void ItFailsToInstantiateWithInvalidGlobalType()
         {
-            Action action = () => { using (var instance = Fixture.Module.Instantiate<NotAValidGlobalTypeHost>()) { } };
+            Action action = () => { using (var instance = Fixture.Module.Instantiate(new NotAValidGlobalTypeHost())) { } };
 
             action
                 .Should()
-                .Throw<TargetInvocationException>()
-                .WithInnerException<NotSupportedException>("Type is expected to be 'int', 'long', 'float', or 'double'.");
+                .Throw<NotSupportedException>("Type is expected to be 'int', 'long', 'float', or 'double'.");
         }
 
         [Fact]
         public void ItFailsToInstantiateWithGlobalTypeMismatch()
         {
-            Action action = () => { using (var instance = Fixture.Module.Instantiate<TypeMismatchHost>()) { } };
+            Action action = () => { using (var instance = Fixture.Module.Instantiate(new TypeMismatchHost())) { } };
 
             action
                 .Should()
@@ -168,29 +184,29 @@ namespace Wasmtime.Tests
         [Fact]
         public void ItFailsToInstantiateWhenGlobalIsNotMut()
         {
-            Action action = () => { using (var instance = Fixture.Module.Instantiate<NotMutHost>()) { } };
+            Action action = () => { using (var instance = Fixture.Module.Instantiate(new NotMutHost())) { } };
 
             action
                 .Should()
                 .Throw<WasmtimeException>()
-                .WithMessage("Unable to bind 'NotMutHost.Int32Mut' to WebAssembly import 'global_i32_mut': global is expected to be mutable.");
+                .WithMessage("Unable to bind 'NotMutHost.Int32Mut' to WebAssembly import 'global_i32_mut': the import is mutable (use the 'MutableGlobal' type).");
         }
 
         [Fact]
         public void ItFailsToInstantiateWhenGlobalIsMut()
         {
-            Action action = () => { using (var instance = Fixture.Module.Instantiate<MutHost>()) { } };
+            Action action = () => { using (var instance = Fixture.Module.Instantiate(new MutHost())) { } };
 
             action
                 .Should()
                 .Throw<WasmtimeException>()
-                .WithMessage("Unable to bind 'MutHost.Int32' to WebAssembly import 'global_i32': global is expected to be immutable.");
+                .WithMessage("Unable to bind 'MutHost.Int32' to WebAssembly import 'global_i32': the import is constant (use the 'Global' type).");
         }
 
         [Fact]
         public void ItBindsTheGlobalsCorrectly()
         {
-            using (dynamic instance = Fixture.Module.Instantiate<ValidHost>())
+            using (dynamic instance = Fixture.Module.Instantiate(new ValidHost()))
             {
                 var host = (ValidHost)instance.Host;
 
@@ -238,30 +254,6 @@ namespace Wasmtime.Tests
                 instance.set_global_f64_mut(17);
                 host.Float64Mut.Value.Should().Be(17);
                 ((double)instance.get_global_f64_mut()).Should().Be(17);
-
-                Action action = () => host.Int32.Value = 0;
-                action
-                    .Should()
-                    .Throw<InvalidOperationException>()
-                    .WithMessage("The value of the global cannot be modified.");
-
-                action = () => host.Int64.Value = 0;
-                action
-                    .Should()
-                    .Throw<InvalidOperationException>()
-                    .WithMessage("The value of the global cannot be modified.");
-
-                action = () => host.Float32.Value = 0;
-                action
-                    .Should()
-                    .Throw<InvalidOperationException>()
-                    .WithMessage("The value of the global cannot be modified.");
-
-                action = () => host.Float64.Value = 0;
-                action
-                    .Should()
-                    .Throw<InvalidOperationException>()
-                    .WithMessage("The value of the global cannot be modified.");
             }
         }
     }

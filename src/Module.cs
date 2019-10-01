@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Reflection;
 using System.Runtime.InteropServices;
 
 namespace Wasmtime
@@ -47,13 +45,22 @@ namespace Wasmtime
         }
 
         /// <summary>
-        /// Instantiates a WebAssembly module.
+        /// Instantiates a WebAssembly module for the given host.
         /// </summary>
-        /// <typeparam name="T">The host type defining the imports to the module.</typeparam>
+        /// <param name="host">The host to use for the WebAssembly module's instance.</param>
         /// <returns>Returns a new <see href="Instance" />.</returns>
-        public Instance Instantiate<T>() where T : Host, new()
+        public Instance Instantiate(IHost host)
         {
-            var host = new T();
+            if (host == null)
+            {
+                throw new ArgumentNullException(nameof(host));
+            }
+
+            if (host.Instance != null)
+            {
+                throw new InvalidOperationException("The host has already been associated with an instantiated module.");
+            }
+
             host.Instance = new Instance(this, host);
             return host.Instance;
         }

@@ -3,8 +3,10 @@ using Wasmtime;
 
 namespace HelloExample
 {
-    class Host : Wasmtime.Host
+    class Host : IHost
     {
+        public Instance Instance { get; set; }
+
         [Import("hello")]
         public void SayHello()
         {
@@ -22,7 +24,7 @@ namespace HelloExample
                 {
                     using (var module = store.CreateModule("hello.wasm"))
                     {
-                        using (dynamic instance = module.Instantiate<Host>())
+                        using (dynamic instance = module.Instantiate(new Host()))
                         {
                             instance.run();
                         }

@@ -15,8 +15,9 @@ namespace Wasmtime.Tests
 
     public class GlobalExportsTests : IClassFixture<GlobalExportsFixture>
     {
-        public class Host : Wasmtime.Host
+        public class Host : IHost
         {
+            public Instance Instance { get; set; }
         }
 
         public GlobalExportsTests(GlobalExportsFixture fixture)
@@ -45,7 +46,7 @@ namespace Wasmtime.Tests
         [Fact]
         public void ItCreatesExternsForTheGlobals()
         {
-            using (var instance = Fixture.Module.Instantiate<Host>())
+            using (var instance = Fixture.Module.Instantiate(new Host()))
             {
                 dynamic dyn = instance;
                 var globals = instance.Externs.Globals;

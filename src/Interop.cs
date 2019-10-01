@@ -85,6 +85,21 @@ namespace Wasmtime
             }
         }
 
+        internal class MemoryHandle : SafeHandle
+        {
+            public MemoryHandle() : base(IntPtr.Zero, true)
+            {
+            }
+
+            public override bool IsInvalid => handle == IntPtr.Zero;
+
+            protected override bool ReleaseHandle()
+            {
+                Interop.wasm_memory_delete(handle);
+                return true;
+            }
+        }
+
         internal class InstanceHandle : SafeHandle
         {
             public InstanceHandle() : base(IntPtr.Zero, true)
@@ -126,6 +141,21 @@ namespace Wasmtime
             protected override bool ReleaseHandle()
             {
                 Interop.wasm_globaltype_delete(handle);
+                return true;
+            }
+        }
+
+        internal class MemoryTypeHandle : SafeHandle
+        {
+            public MemoryTypeHandle() : base(IntPtr.Zero, true)
+            {
+            }
+
+            public override bool IsInvalid => handle == IntPtr.Zero;
+
+            protected override bool ReleaseHandle()
+            {
+                Interop.wasm_memorytype_delete(handle);
                 return true;
             }
         }
@@ -635,6 +665,18 @@ namespace Wasmtime
         [DllImport("wasmtime_api")]
         public static extern wasm_mutability_t wasm_globaltype_mutability(IntPtr globalType);
 
+        // Memory type imports
+
+        [DllImport("wasmtime_api")]
+        public static extern unsafe MemoryTypeHandle wasm_memorytype_new(wasm_limits_t* limits);
+
+        [DllImport("wasmtime_api")]
+        public static extern IntPtr wasm_memorytype_delete(IntPtr memoryType);
+
+
+        [DllImport("wasmtime_api")]
+        public static extern unsafe wasm_limits_t* wasm_memorytype_limits(MemoryTypeHandle memoryType);
+
         // Trap imports
 
         [DllImport("wasmtime_api")]
@@ -675,5 +717,28 @@ namespace Wasmtime
 
         [DllImport("wasmtime_api")]
         public static unsafe extern void wasm_global_set(IntPtr global, wasm_val_t* value);
+
+        // Memory imports
+
+        [DllImport("wasmtime_api")]
+        public static extern MemoryHandle wasm_memory_new(StoreHandle handle, IntPtr memoryType);
+
+        [DllImport("wasmtime_api")]
+        public static extern void wasm_memory_delete(IntPtr memory);
+
+        [DllImport("wasmtime_api")]
+        public static extern IntPtr wasm_memory_type(MemoryHandle memory);
+
+        [DllImport("wasmtime_api")]
+        public static unsafe extern byte* wasm_memory_data(MemoryHandle memory);
+
+        [DllImport("wasmtime_api")]
+        public static extern UIntPtr wasm_memory_data_size(MemoryHandle memory);
+
+        [DllImport("wasmtime_api")]
+        public static extern uint wasm_memory_size(MemoryHandle memory);
+
+        [DllImport("wasmtime_api")]
+        public static extern bool wasm_memory_grow(MemoryHandle memory, uint delta);
     }
 }
