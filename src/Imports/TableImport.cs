@@ -1,14 +1,14 @@
 using System;
 using System.Diagnostics;
 
-namespace Wasmtime
+namespace Wasmtime.Imports
 {
     /// <summary>
-    /// Represents a table exported from a WebAssembly module.
+    /// Represents a table imported to a WebAssembly module.
     /// </summary>
-    public class TableExport : Export
+    public class TableImport : Import
     {
-        internal TableExport(IntPtr exportType, IntPtr externType) : base(exportType)
+        internal TableImport(IntPtr importType, IntPtr externType) : base(importType)
         {
             Debug.Assert(Interop.wasm_externtype_kind(externType) == Interop.wasm_externkind_t.WASM_EXTERN_TABLE);
 

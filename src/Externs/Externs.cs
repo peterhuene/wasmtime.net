@@ -1,14 +1,15 @@
 using System;
 using System.Collections.Generic;
+using Wasmtime.Exports;
 
-namespace Wasmtime
+namespace Wasmtime.Externs
 {
     /// <summary>
     /// Represents external (instantiated) WebAssembly functions, globals, tables, and memories.
     /// </summary>
     public class Externs
     {
-        internal Externs(Exports exports, Interop.wasm_extern_vec_t externs)
+        internal Externs(Wasmtime.Exports.Exports exports, Interop.wasm_extern_vec_t externs)
         {
             var functions = new List<ExternFunction>();
             var globals = new List<ExternGlobal>();

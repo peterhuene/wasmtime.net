@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace Wasmtime
+namespace Wasmtime.Imports
 {
     /// <summary>
     /// The base class for import types.

@@ -1,7 +1,7 @@
 using System;
 using System.Diagnostics;
 
-namespace Wasmtime
+namespace Wasmtime.Imports
 {
     /// <summary>
     /// Represents a memory imported to a WebAssembly module.

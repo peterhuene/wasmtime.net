@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Wasmtime
+namespace Wasmtime.Exports
 {
     /// <summary>
     /// Represents the exports of a WebAssembly module.

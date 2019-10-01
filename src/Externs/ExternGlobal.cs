@@ -1,6 +1,7 @@
 using System;
+using Wasmtime.Exports;
 
-namespace Wasmtime
+namespace Wasmtime.Externs
 {
     /// <summary>
     /// Represents an external (instantiated) WebAssembly global.

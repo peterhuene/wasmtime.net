@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Wasmtime
+namespace Wasmtime.Imports
 {
     /// <summary>
     /// Represents imported functions, globals, tables, and memories to a WebAssembly module.

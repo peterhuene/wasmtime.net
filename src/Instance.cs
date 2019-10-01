@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Dynamic;
+using Wasmtime.Externs;
 
 namespace Wasmtime
 {
@@ -46,7 +47,7 @@ namespace Wasmtime
 
             Interop.wasm_instance_exports(Handle, out _externs);
 
-            Externs = new Externs(Module.Exports, _externs);
+            Externs = new Wasmtime.Externs.Externs(Module.Exports, _externs);
 
             _functions = Externs.Functions.ToDictionary(f => f.Name);
             _globals = Externs.Globals.ToDictionary(g => g.Name);
@@ -65,7 +66,7 @@ namespace Wasmtime
         /// <summary>
         /// The external (instantiated) collection of functions, globals, tables, and memories.
         /// </summary>
-        public Externs Externs { get; private set; }
+        public Wasmtime.Externs.Externs Externs { get; private set; }
 
         /// <inheritdoc/>
         public void Dispose()

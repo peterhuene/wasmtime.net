@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
+using Wasmtime.Imports;
 
 namespace Wasmtime.Bindings
 {

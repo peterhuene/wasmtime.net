@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
+using Wasmtime.Exports;
 
-namespace Wasmtime
+namespace Wasmtime.Externs
 {
     /// <summary>
     /// Represents an external (instantiated) WebAssembly function.

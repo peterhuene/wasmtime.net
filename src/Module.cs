@@ -40,8 +40,8 @@ namespace Wasmtime
 
             Store = store;
             Name = name;
-            Imports = new Imports(this);
-            Exports = new Exports(this);
+            Imports = new Wasmtime.Imports.Imports(this);
+            Exports = new Wasmtime.Exports.Exports(this);
         }
 
         /// <summary>
@@ -78,13 +78,13 @@ namespace Wasmtime
         /// <summary>
         /// The imports of the module.
         /// </summary>
-        public Imports Imports { get; private set; }
+        public Wasmtime.Imports.Imports Imports { get; private set; }
 
         /// <summary>
         /// The exports of the module.
         /// </summary>
         /// <value></value>
-        public Exports Exports { get; private set; }
+        public Wasmtime.Exports.Exports Exports { get; private set; }
 
         /// <inheritdoc/>
         public void Dispose()

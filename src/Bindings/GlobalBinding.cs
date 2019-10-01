@@ -1,6 +1,7 @@
 using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using Wasmtime.Imports;
 
 namespace Wasmtime.Bindings
 {

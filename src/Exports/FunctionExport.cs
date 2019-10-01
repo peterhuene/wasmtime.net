@@ -2,14 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace Wasmtime
+namespace Wasmtime.Exports
 {
     /// <summary>
-    /// Represents a function imported to a WebAssembly module.
+    /// Represents a function exported from a WebAssembly module.
     /// </summary>
-    public class FunctionImport : Import
+    public class FunctionExport : Export
     {
-        internal FunctionImport(IntPtr importType, IntPtr externType) : base(importType)
+        internal FunctionExport(IntPtr exportType, IntPtr externType) : base(exportType)
         {
             Debug.Assert(Interop.wasm_externtype_kind(externType) == Interop.wasm_externkind_t.WASM_EXTERN_FUNC);
 
@@ -22,12 +22,12 @@ namespace Wasmtime
         }
 
         /// <summary>
-        /// The parameters of the imported function.
+        /// The parameter of the exported WebAssembly function.
         /// </summary>
         public IReadOnlyList<ValueKind> Parameters { get; private set; }
 
         /// <summary>
-        /// The results of the imported function.
+        /// The results of the exported WebAssembly function.
         /// </summary>
         public IReadOnlyList<ValueKind> Results { get; private set; }
     }

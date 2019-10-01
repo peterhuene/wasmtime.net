@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace Wasmtime
+namespace Wasmtime.Exports
 {
     /// <summary>
     /// Represents an export of a WebAssembly module.

@@ -1,14 +1,14 @@
 using System;
 using System.Diagnostics;
 
-namespace Wasmtime
+namespace Wasmtime.Exports
 {
     /// <summary>
-    /// Represents a global variable imported to a WebAssembly module.
+    /// Represents a global variable exported from a WebAssembly module.
     /// </summary>
-    public class GlobalImport : Import
+    public class GlobalExport : Export
     {
-        internal GlobalImport(IntPtr importType, IntPtr externType) : base(importType)
+        internal GlobalExport(IntPtr exportType, IntPtr externType) : base(exportType)
         {
             Debug.Assert(Interop.wasm_externtype_kind(externType) == Interop.wasm_externkind_t.WASM_EXTERN_GLOBAL);
 
