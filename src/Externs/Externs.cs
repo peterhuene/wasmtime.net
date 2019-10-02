@@ -13,6 +13,7 @@ namespace Wasmtime.Externs
         {
             var functions = new List<ExternFunction>();
             var globals = new List<ExternGlobal>();
+            var memories = new List<ExternMemory>();
 
             for (int i = 0; i < (int)externs.size; ++i)
             {
@@ -32,6 +33,11 @@ namespace Wasmtime.Externs
                             globals.Add(global);
                             break;
 
+                        case Interop.wasm_externkind_t.WASM_EXTERN_MEMORY:
+                            var memory = new ExternMemory((MemoryExport)exports.All[i], Interop.wasm_extern_as_memory(ext));
+                            memories.Add(memory);
+                            break;
+
                         default:
                             throw new NotSupportedException("Unsupported extern type.");
                     }
@@ -40,6 +46,7 @@ namespace Wasmtime.Externs
 
             Functions = functions;
             Globals = globals;
+            Memories = memories;
         }
 
         /// <summary>
@@ -51,5 +58,10 @@ namespace Wasmtime.Externs
         /// The extern globals from an instantiated WebAssembly module.
         /// </summary>
         public IReadOnlyList<ExternGlobal> Globals { get; private set; }
+
+        /// <summary>
+        /// The extern memories from an instantiated WebAssembly module.
+        /// </summary>
+        public IReadOnlyList<ExternMemory> Memories { get; private set; }
     }
 }

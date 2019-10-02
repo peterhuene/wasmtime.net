@@ -1,10 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
 using FluentAssertions;
-using Wasmtime;
 using Xunit;
 
 namespace Wasmtime.Tests
@@ -206,10 +201,9 @@ namespace Wasmtime.Tests
         [Fact]
         public void ItBindsTheGlobalsCorrectly()
         {
-            using (dynamic instance = Fixture.Module.Instantiate(new ValidHost()))
+            var host = new ValidHost();
+            using (dynamic instance = Fixture.Module.Instantiate(host))
             {
-                var host = (ValidHost)instance.Host;
-
                 host.Int32Mut.Value.Should().Be(0);
                 ((int)instance.get_global_i32_mut()).Should().Be(0);
                 host.Int32.Value.Should().Be(1);

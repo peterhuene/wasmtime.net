@@ -129,6 +129,9 @@ namespace Wasmtime
                 case Interop.GlobalHandle g:
                     return Interop.wasm_global_as_extern(g);
 
+                case Interop.MemoryHandle m:
+                    return Interop.wasm_memory_as_extern(m);
+
                 default:
                     throw new NotSupportedException("Unexpected handle type.");
             }

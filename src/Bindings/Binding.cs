@@ -49,6 +49,10 @@ namespace Wasmtime.Bindings
                         bindings.Add(BindGlobal(global, fields));
                         break;
 
+                    case MemoryImport memory:
+                        bindings.Add(BindMemory(memory, fields));
+                        break;
+
                     default:
                         throw new NotSupportedException("Unsupported import binding type.");
                 }
@@ -88,7 +92,7 @@ namespace Wasmtime.Bindings
                 {
                     var attribute = (ImportAttribute)f.GetCustomAttribute(typeof(ImportAttribute));
                     return attribute.Name == import.Name &&
-                        ((string.IsNullOrEmpty(attribute.Module) &&
+                           ((string.IsNullOrEmpty(attribute.Module) &&
                             string.IsNullOrEmpty(import.ModuleName)) ||
                             attribute.Module == import.ModuleName);
                 }
@@ -100,6 +104,26 @@ namespace Wasmtime.Bindings
             }
 
             return new GlobalBinding(import, field);
+        }
+
+        private static MemoryBinding BindMemory(MemoryImport import, IEnumerable<FieldInfo> fields)
+        {
+            var field = fields.Where(f =>
+                {
+                    var attribute = (ImportAttribute)f.GetCustomAttribute(typeof(ImportAttribute));
+                    return attribute.Name == import.Name &&
+                           ((string.IsNullOrEmpty(attribute.Module) &&
+                            string.IsNullOrEmpty(import.ModuleName)) ||
+                            attribute.Module == import.ModuleName);
+                }
+            ).FirstOrDefault();
+
+            if (field == null)
+            {
+                throw new WasmtimeException($"Failed to bind memory import '{import}': the host does not contain a memory field with a matching 'Import' attribute.");
+            }
+
+            return new MemoryBinding(import, field);
         }
     }
 }

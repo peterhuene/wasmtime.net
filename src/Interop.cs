@@ -624,6 +624,9 @@ namespace Wasmtime
         [DllImport("wasmtime_api")]
         public static extern IntPtr wasm_global_as_extern(GlobalHandle global);
 
+        [DllImport("wasmtime_api")]
+        public static extern IntPtr wasm_memory_as_extern(MemoryHandle memory);
+
         // Function type imports
 
         [DllImport("wasmtime_api")]
@@ -721,7 +724,7 @@ namespace Wasmtime
         // Memory imports
 
         [DllImport("wasmtime_api")]
-        public static extern MemoryHandle wasm_memory_new(StoreHandle handle, IntPtr memoryType);
+        public static extern MemoryHandle wasm_memory_new(StoreHandle handle, MemoryTypeHandle memoryType);
 
         [DllImport("wasmtime_api")]
         public static extern void wasm_memory_delete(IntPtr memory);
@@ -730,10 +733,10 @@ namespace Wasmtime
         public static extern IntPtr wasm_memory_type(MemoryHandle memory);
 
         [DllImport("wasmtime_api")]
-        public static unsafe extern byte* wasm_memory_data(MemoryHandle memory);
+        public static unsafe extern byte* wasm_memory_data(IntPtr memory);
 
         [DllImport("wasmtime_api")]
-        public static extern UIntPtr wasm_memory_data_size(MemoryHandle memory);
+        public static extern UIntPtr wasm_memory_data_size(IntPtr memory);
 
         [DllImport("wasmtime_api")]
         public static extern uint wasm_memory_size(MemoryHandle memory);

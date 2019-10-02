@@ -45,6 +45,6 @@ namespace Wasmtime
 
         internal Interop.GlobalHandle Handle { get; set; }
 
-        public T InitialValue { get; private set; }
+        internal T InitialValue { get; private set; }
     }
 }

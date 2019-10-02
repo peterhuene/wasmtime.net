@@ -106,11 +106,11 @@ To run the Wasmtime.NET unit tests, follow these instructions:
 | Extern instance functions             | ✅     |
 | Extern instance globals               | ✅️     |
 | Extern instance tables                | ⬜️     |
-| Extern instance memories              | ⬜️     |
+| Extern instance memories              | ✅️     |
 | Host function import binding          | ✅     |
 | Host global import binding            | ✅ ️️    |
 | Host table import binding             | ⬜️ ️️    |
-| Host memory import binding            | ⬜️ ️️    |
+| Host memory import binding            | ✅️ ️️    |
 | `i32` parameters and return values    | ✅     |
 | `i64` parameters and return values    | ✅     |
 | `f32` parameters and return values    | ✅     |
