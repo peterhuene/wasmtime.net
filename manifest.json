@@ -9,7 +9,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Bindings.Binding.html",
-          "hash": "UQtH7efW3JcsKL0qJt5kPQ=="
+          "hash": "VNGwCXBrGblRXYh3Puf1jw=="
         }
       },
       "is_incremental": false,
@@ -21,7 +21,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Bindings.FunctionBinding.html",
-          "hash": "MbBLdajScNVtlfGrxvOpzg=="
+          "hash": "Iv+vqUahqtW7ZcVynCVTPw=="
         }
       },
       "is_incremental": false,
@@ -33,7 +33,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Bindings.GlobalBinding.html",
-          "hash": "j6sKitBL5PCOuYOLYiY+HQ=="
+          "hash": "V7kwWtpmobjNgEByt62f5w=="
         }
       },
       "is_incremental": false,
@@ -45,7 +45,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Bindings.MemoryBinding.html",
-          "hash": "k5FF9su0MegtkVX+VqbKfw=="
+          "hash": "qe93gy9rvsCCGKxZIur+oQ=="
         }
       },
       "is_incremental": false,
@@ -69,7 +69,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Engine.html",
-          "hash": "uKsx5rVihyK4U0Vg7eC0ng=="
+          "hash": "TabYSdM8/TyCVpRE+M2fJg=="
         }
       },
       "is_incremental": false,
@@ -81,7 +81,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Exports.Export.html",
-          "hash": "oftceKTT7GqqoC8f/mq4wg=="
+          "hash": "iWOrM5DSwtKWBWoUqw48XA=="
         }
       },
       "is_incremental": false,
@@ -93,7 +93,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Exports.Exports.html",
-          "hash": "neBDRFwulDifHjHgOKReSA=="
+          "hash": "49tgdFWLsKZCJQiHX2O0dw=="
         }
       },
       "is_incremental": false,
@@ -105,7 +105,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Exports.FunctionExport.html",
-          "hash": "RbcDUH2XRrULNHpIUWXesQ=="
+          "hash": "rxBh0Nr6cSNFIhKr/rbafA=="
         }
       },
       "is_incremental": false,
@@ -117,7 +117,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Exports.GlobalExport.html",
-          "hash": "ax9TCZidY4N3fnNGcgXttQ=="
+          "hash": "pVd1S9cqhWz0Bny2L/Q2Ew=="
         }
       },
       "is_incremental": false,
@@ -129,7 +129,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Exports.MemoryExport.html",
-          "hash": "yHZm05qgIsKOzL+NR0Kw3g=="
+          "hash": "q4VF+N7UCR0oguxbyaNzaA=="
         }
       },
       "is_incremental": false,
@@ -141,7 +141,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Exports.TableExport.html",
-          "hash": "oyPKbMZFS0YByRVqCmrvYA=="
+          "hash": "gV/Yede2dkE36FYYsBDczQ=="
         }
       },
       "is_incremental": false,
@@ -165,7 +165,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Externs.ExternFunction.html",
-          "hash": "c4OQbJwnUrsuMZkMJ0OASg=="
+          "hash": "tEBD09YG7dByM8mGCSGiiQ=="
         }
       },
       "is_incremental": false,
@@ -177,7 +177,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Externs.ExternGlobal.html",
-          "hash": "4w8onLOwCX1+sgDA4L4M3w=="
+          "hash": "+rHoHFHYTcbRgcZH22pvAw=="
         }
       },
       "is_incremental": false,
@@ -189,7 +189,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Externs.ExternMemory.html",
-          "hash": "1S+aaOWOXbhLP9Qipf3Plw=="
+          "hash": "PonbQdCZigjByAtMXWft2w=="
         }
       },
       "is_incremental": false,
@@ -201,7 +201,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Externs.Externs.html",
-          "hash": "+V2JwoyZYpTeU9iMtzbMug=="
+          "hash": "/3twKlHpPyJ2jy0tTb6e5g=="
         }
       },
       "is_incremental": false,
@@ -225,7 +225,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Global-1.html",
-          "hash": "GrmMZGU7gSwrx7/Pl2/GOQ=="
+          "hash": "nkDSSRI0e4g057XjDmrrfg=="
         }
       },
       "is_incremental": false,
@@ -237,7 +237,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.IHost.html",
-          "hash": "rpfJHmZgVpL34Q95RbVtgw=="
+          "hash": "i4bsanIAmPUc4Ex9dLXUfw=="
         }
       },
       "is_incremental": false,
@@ -249,7 +249,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.ImportAttribute.html",
-          "hash": "LH1Nwb0xtDBtmsh+Bg4xOg=="
+          "hash": "XWk9J05wNXrGyaJyngVCUQ=="
         }
       },
       "is_incremental": false,
@@ -261,7 +261,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Imports.FunctionImport.html",
-          "hash": "+kRw3mXLCvIuCCkYWVht7A=="
+          "hash": "TWjE/xCdoHEkOY4K8pLfTQ=="
         }
       },
       "is_incremental": false,
@@ -273,7 +273,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Imports.GlobalImport.html",
-          "hash": "4luDy1fL6xi2GDzjnHZnIA=="
+          "hash": "b8LZ40HuWLAFNvyInmT48w=="
         }
       },
       "is_incremental": false,
@@ -285,7 +285,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Imports.Import.html",
-          "hash": "4RXwmgZVUXaJWKNU/zd2HQ=="
+          "hash": "mSn69iqnHVGDT/xDpMLKIg=="
         }
       },
       "is_incremental": false,
@@ -297,7 +297,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Imports.Imports.html",
-          "hash": "HsN12muQAk/kTaa+sa8oQw=="
+          "hash": "kyLP+93qdiQjmtkxNmmzhQ=="
         }
       },
       "is_incremental": false,
@@ -309,7 +309,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Imports.MemoryImport.html",
-          "hash": "Ryo8kcCFJjG8M9urkPmnVQ=="
+          "hash": "3QkHNTMfCfhtRxz2QfTPcw=="
         }
       },
       "is_incremental": false,
@@ -321,7 +321,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Imports.TableImport.html",
-          "hash": "FGlduCP1xhW+HryhmAOtdw=="
+          "hash": "pYjlGtmohbB5SblULPRqnA=="
         }
       },
       "is_incremental": false,
@@ -345,7 +345,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Instance.html",
-          "hash": "khQDkuIO82aXkVBT7WFtIA=="
+          "hash": "cmsB1coMVKxgcfOCdfJQJg=="
         }
       },
       "is_incremental": false,
@@ -357,7 +357,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Memory.html",
-          "hash": "haX7PQ54mXwga21mmVOo5Q=="
+          "hash": "YdojO8ublsJboFuDQoLM6Q=="
         }
       },
       "is_incremental": false,
@@ -369,7 +369,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Module.html",
-          "hash": "tIYA3Yywg6FGNXQtqTgqHA=="
+          "hash": "t/uWvaPzaH9FgXj4jVs+jw=="
         }
       },
       "is_incremental": false,
@@ -381,7 +381,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.MutableGlobal-1.html",
-          "hash": "8LIiCpvIdPtaE+ZsmydFiA=="
+          "hash": "ZO8/XKuMHbEp5GfGKm0Giw=="
         }
       },
       "is_incremental": false,
@@ -393,7 +393,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Store.html",
-          "hash": "3EwSzVfYW8w4l44efK97Hg=="
+          "hash": "Z1h65sUqkP+V+eMSsg+83Q=="
         }
       },
       "is_incremental": false,
@@ -405,7 +405,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.TrapException.html",
-          "hash": "SZEqYs9rty67VS+UrEYt6A=="
+          "hash": "sgYPiZXf53NSVqKiIKu+aQ=="
         }
       },
       "is_incremental": false,
@@ -417,7 +417,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.ValueKind.html",
-          "hash": "cm5AoVsXCj5DGY7sXHd5kw=="
+          "hash": "Q7RCQ3jsTvZxGOeHRrbYhQ=="
         }
       },
       "is_incremental": false,
@@ -429,7 +429,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.WasmtimeException.html",
-          "hash": "U/DBlN0SVN0qMZfxgC/15w=="
+          "hash": "bvQvClUA6CGp5x5w3+5enw=="
         }
       },
       "is_incremental": false,
@@ -456,7 +456,7 @@
       "output": {
         ".html": {
           "relative_path": "api/index.html",
-          "hash": "QV0yef1ZRuc3Vit24buxPQ=="
+          "hash": "gY+UDUAd6QCz6A185OBGvQ=="
         }
       },
       "is_incremental": false,
@@ -480,7 +480,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/intro.html",
-          "hash": "77wPHDNIAxrHA54RJ/WSXQ=="
+          "hash": "QMLCjPT1Y1nMAI7jjQIOSg=="
         }
       },
       "is_incremental": false,
@@ -504,7 +504,7 @@
       "output": {
         ".html": {
           "relative_path": "index.html",
-          "hash": "ZttU+fl2rMR/9w/y92QO1g=="
+          "hash": "801Qv9vD+BUV4r3zO9/8Gw=="
         }
       },
       "is_incremental": false,
@@ -516,7 +516,7 @@
       "output": {
         ".html": {
           "relative_path": "toc.html",
-          "hash": "k+/dkjFuwAVS32HduMpmBw=="
+          "hash": "N2caTmJ/E9CdUsXrzNRfsA=="
         }
       },
       "is_incremental": false,
@@ -534,10 +534,11 @@
         "full_build_reason_code": "NoAvailableBuildCache"
       },
       "processors": {
-        "ManagedReferenceDocumentProcessor": {
+        "TocDocumentProcessor": {
           "can_incremental": false,
+          "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
           "incrementalPhase": "build",
-          "total_file_count": 37,
+          "total_file_count": 0,
           "skipped_file_count": 0
         },
         "ConceptualDocumentProcessor": {
@@ -546,11 +547,10 @@
           "total_file_count": 3,
           "skipped_file_count": 0
         },
-        "TocDocumentProcessor": {
+        "ManagedReferenceDocumentProcessor": {
           "can_incremental": false,
-          "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
           "incrementalPhase": "build",
-          "total_file_count": 0,
+          "total_file_count": 37,
           "skipped_file_count": 0
         }
       }
