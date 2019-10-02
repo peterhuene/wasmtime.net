@@ -9,4 +9,37 @@
     <PackageReference Include="Microsoft.CSharp" Version="4.6.0" />
   </ItemGroup>
 
+  <PropertyGroup>
+    <PackageId>Wasmtime</PackageId>
+    <Version>0.0.1-alpha1</Version>
+    <Authors>Peter Huene</Authors>
+    <Owners>Peter Huene</Owners>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <RepositoryUrl>https://github.com/peterhuene/wasmtime.net/</RepositoryUrl>
+    <PackageReleaseNotes>Initial release of Wasmtime.NET.</PackageReleaseNotes>
+    <Summary>A .NET API for Wasmtime, a standalone WebAssembly runtime</Summary>
+    <PackageTags>webassembly, .net, wasm, wasmtime</PackageTags>
+    <Title>Wasmtime</Title>
+    <PackageDescription>
+A .NET API for Wasmtime.
+
+Wasmtime is a standalone runtime for WebAssembly, using the Cranelift JIT compiler.
+
+Wasmtime.NET allows .NET code to instantiate WebAssembly modules and to interact with them in-process.
+    </PackageDescription>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="../wasmtime/linux/libwasmtime_api.so" Link="runtimes/linux-x64/native/libwasmtime_api.so">
+      <PackagePath>runtimes/linux-x64/native</PackagePath>
+    </Content>
+    <Content Include="../wasmtime/macos/libwasmtime_api.dylib" Link="runtimes/osx-x64/native/libwasmtime_api.dylib">
+      <PackagePath>runtimes/osx-x64/native</PackagePath>
+    </Content>
+    <Content Include="../wasmtime/windows/wasmtime_api.dll" Link="runtimes/win-x64/native/wasmtime_api.dll">
+      <PackagePath>runtimes/win-x64/native</PackagePath>
+    </Content>
+  </ItemGroup>
+
 </Project>

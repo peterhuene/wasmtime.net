@@ -14,58 +14,22 @@ Wasmtime.NET allows .NET code to instantiate WebAssembly modules and to interact
 
 Install a [.NET Core 3.0+ SDK](https://dotnet.microsoft.com/download) for your operating system.
 
-### Rust
+## Introduction to Wasmtime.NET
 
-If you intend to build your own Wasmtime API library, a Rust compiler will be required.
+See the [introduction to Wasmtime.NET](https://peterhuene.github.io/wasmtime.net/articles/intro.html) for a complete walkthrough of how to use Wasmtime.NET.
 
-Install [rustup](https://rustup.rs/) to get started with a Rust toolchain.
+# Wasmtime.NET API documentation
 
-### Wasmtime API
+See the [Wasmtime.NET API documentation](https://peterhuene.github.io/wasmtime.net/api/index.html) for documentation on using the Wasmtime.NET types.
 
-If you *do not* intend to build your own Wasmtime API library, you may download the latest development snapshot for your operating system:
-
-| Operating System | Link                                                                                                              |
-|------------------|-------------------------------------------------------------------------------------------------------------------|
-| Linux (x86_64)   | [Download](https://github.com/CraneStation/wasmtime/releases/download/dev/wasmtime-dev-x86_64-linux-c-api.tar.xz) |
-| macOS (x86_64)   | [Download](https://github.com/CraneStation/wasmtime/releases/download/dev/wasmtime-dev-x86_64-macos-c-api.tar.xz) |
-| Windows (x64)    | [Download](https://github.com/CraneStation/wasmtime/releases/download/dev/wasmtime-dev-x86_64-windows-c-api.zip)  |
-
-For Linux, copy `libwasmtime_api.so` to the directory containing your .NET program.
-
-For macOS, copy `libwasmtime_api.dylib` to the directory containing your .NET program.
-
-For Windows, copy `wasmtime_api.dll` to the directory containing your .NET program.
-
-_NOTE: in the future there will be a "Wasmtime" NuGet package will come with the Wasmtime API library for all supported platforms._
-
-### Building Wasmtime
-
-If you intend to build your own Wasmtime API library, follow these instructions:
-
-1. Clone or fork the [Wasmtime repository](https://github.com/cranestation/wasmtime). _Note that the repository uses Git submodules, so use the `--recurse-submodules` option when cloning._
-2. cd `wasmtime`
-3. `cargo build --release --features wasmtime-api/wasm-c-api --package wasmtime-api`
-
-The Wasmtime API library should now be present in `<repo-root>/target/release`.
-
-For Linux, the library will be named `libwasmtime_api.so`.
-
-For MacOS, the library will be named `libwasmtime_api.dylib`.
-
-For Windows, the library will be named `wasmtime_api.dll`.
-
-Copy the Wasmtime API library to your .NET project output directory (e.g. `bin/Release/netcoreapp3.0/`).
-
-## Running the "Hello World" Example
+# Running the "Hello World" Example
 
 The "hello world" example demonstrates a simple C# function being called from WebAssembly.
 
 To run the "hello world" example, follow these instructions:
 
 1. `cd examples/hello`
-2. `dotnet build`
-3. Copy the Wasmtime API library to `bin/Debug/netcoreapp3.0`.
-4. Run `bin/Debug/netcoreapp3.0/hello` (Linux/macOS) or `bin/Debug/netcoreapp3.0/hello.exe` (Windows).
+2. `dotnet run`
 
 You should see a `Hello from C#, WebAssembly!` message printed.
 
@@ -76,7 +40,16 @@ To build Wasmtime.NET, follow these instructions:
 1. `cd src`.
 2. `dotnet build`.
 
-This should produce a `Wasmtime.dll` assembly in `bin/Debug/netstandard2.1`.
+This should produce a `Wasmtime.dll` assembly in the `bin/Debug/netstandard2.1` directory.
+
+# Creating the Wasmtime.NET NuGet package
+
+To create the Wasmtime.NET NuGet package, follow these instructions:
+
+1. `cd src`.
+2. `dotnet pack`.
+
+This should produce a `Wasmtime.<version>.nupkg` assembly in the `bin/Debug` directory.
 
 # Running the tests
 
@@ -84,6 +57,18 @@ To run the Wasmtime.NET unit tests, follow these instructions:
 
 1. `cd tests`.
 2. `dotnet test`.
+
+# Wasmtime API
+
+Snapshots of the Wasmtime API libraries exist in this repository in the `wasmtime` directory.  These files are used for packaging the `Wasmtime` NuGet package.
+
+If needed, the Wasmtime API libraries may be updated from the latest development snapshots for your platform:
+
+| Operating System | Link                                                                                                              |
+|------------------|-------------------------------------------------------------------------------------------------------------------|
+| Linux (x86_64)   | [Download](https://github.com/CraneStation/wasmtime/releases/download/dev/wasmtime-dev-x86_64-linux-c-api.tar.xz) |
+| macOS (x86_64)   | [Download](https://github.com/CraneStation/wasmtime/releases/download/dev/wasmtime-dev-x86_64-macos-c-api.tar.xz) |
+| Windows (x64)    | [Download](https://github.com/CraneStation/wasmtime/releases/download/dev/wasmtime-dev-x86_64-windows-c-api.zip)  |
 
 # Implementation Status
 
@@ -119,6 +104,7 @@ To run the Wasmtime.NET unit tests, follow these instructions:
 | Tuple return types for host functions | ✅     |
 | Trap messages                         | ✅     |
 | Trap frames                           | ⬜️     |
+| Create a NuGet package                | ✅     |
 
 ## Legend
 

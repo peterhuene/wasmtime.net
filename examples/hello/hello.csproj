@@ -9,4 +9,20 @@
     <ProjectReference Include="..\..\src\Wasmtime.csproj" />
   </ItemGroup>
 
+  <!-- This is needed as we're not referencing Wasmtime as a package. -->
+  <ItemGroup>
+    <None Include="../../wasmtime/linux/libwasmtime_api.so" Condition="$(RuntimeIdentifier.StartsWith('linux')) or ('$(RuntimeIdentifier)' == '' and $(NETCoreSdkRuntimeIdentifier.StartsWith('linux')))">
+      <Link>libwasmtime_api.so</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="../../wasmtime/macos/libwasmtime_api.dylib" Condition="$(RuntimeIdentifier.StartsWith('osx')) or ('$(RuntimeIdentifier)' == '' and $(NETCoreSdkRuntimeIdentifier.StartsWith('osx')))">
+      <Link>libwasmtime_api.dylib</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="../../wasmtime/windows/wasmtime_api.dll" Condition="$(RuntimeIdentifier.StartsWith('win')) or ('$(RuntimeIdentifier)' == '' and $(NETCoreSdkRuntimeIdentifier.StartsWith('win')))">
+      <Link>wasmtime_api.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
