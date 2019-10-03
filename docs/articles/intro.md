@@ -106,13 +106,13 @@ dotnet new console
 
 ## Referencing the Wasmtime.NET package
 
-To use Wasmtime.NET from the project, we need to add a reference to the `Wasmtime` NuGet package:
+To use Wasmtime.NET from the project, we need to add a reference to the [Wasmtime NuGet package](https://www.nuget.org/packages/Wasmtime):
 
 ```text
 dotnet add package --version 0.0.1-alpha1 wasmtime
 ```
 
-_Note that the `--version` option is required because the `Wasmtime` package is prerelease._
+_Note that the `--version` option is required because the package is currently prerelease._
 
 This will add a `PackageReference` to the project file so that Wasmtime.NET can be used.
 
