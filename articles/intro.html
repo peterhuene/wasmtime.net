@@ -128,10 +128,10 @@ cd tutorial
 dotnet new console
 </code></pre>
 <h2 id="referencing-the-wasmtimenet-package">Referencing the Wasmtime.NET package</h2>
-<p>To use Wasmtime.NET from the project, we need to add a reference to the <code>Wasmtime</code> NuGet package:</p>
+<p>To use Wasmtime.NET from the project, we need to add a reference to the <a href="https://www.nuget.org/packages/Wasmtime">Wasmtime NuGet package</a>:</p>
 <pre><code class="lang-text">dotnet add package --version 0.0.1-alpha1 wasmtime
 </code></pre>
-<p><em>Note that the <code>--version</code> option is required because the <code>Wasmtime</code> package is prerelease.</em></p>
+<p><em>Note that the <code>--version</code> option is required because the package is currently prerelease.</em></p>
 <p>This will add a <code>PackageReference</code> to the project file so that Wasmtime.NET can be used.</p>
 <h2 id="implementing-the-net-code">Implementing the .NET code</h2>
 <p>Replace the contents of <code>Program.cs</code> with the following:</p>
