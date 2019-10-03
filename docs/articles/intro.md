@@ -12,7 +12,7 @@ One of the reasons why WebAssembly is so exciting is that [many languages are ab
 
 Here I've decided to use [Rust](https://www.rust-lang.org/) for the implementation of the WebAssembly module.  Rust is a modern systems programming language that can easily target WebAssembly.
 
-If you wish to skip creating the WebAssembly module, download the [prebuilt WebAssembly module](https://raw.githubusercontent.com/peterhuene/wasmtime.net/master/docs/wasm/intro/hello.wasm) from this tutorial, copy it to your .NET project directory, and continue from the _[Using the WebAssembly module from .NET](#using-the-webassembly-module-from-.net)_ section.
+If you wish to skip creating the WebAssembly module, download the [prebuilt WebAssembly module](https://raw.githubusercontent.com/peterhuene/wasmtime.net/master/docs/wasm/intro/hello.wasm) from this tutorial, copy it to your .NET project directory, and continue from the _[Using the WebAssembly module from .NET](#using-the-webassembly-module-from-net)_ section.
 
 ## Installing a Rust toolchain
 
