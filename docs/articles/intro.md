@@ -22,9 +22,9 @@ This will install both a `rustup` command and a `cargo` command (for the active 
 
 ## Installing the WebAssembly target
 
-To target WebAssembly with the active Rust toolchain, install the `WebAssembly` [target triple](https://forge.rust-lang.org/release/platform-support.html):
+To target WebAssembly with the active Rust toolchain, install the WebAssembly [target triple](https://forge.rust-lang.org/release/platform-support.html):
 
-```
+```text
 rustup target add wasm32-unknown-unknown
 ```
 
@@ -32,7 +32,7 @@ rustup target add wasm32-unknown-unknown
 
 Create a new Rust library project named `hello`:
 
-```
+```text
 cargo new --lib hello
 cd hello
 ```
@@ -72,7 +72,7 @@ Also note that the _address_ is not actually a physical memory address within th
 
 Use `cargo build` to build the WebAssembly module:
 
-```
+```text
 cargo build --target wasm32-unknown-unknown --release
 ```
 
@@ -80,7 +80,7 @@ This should create a `hello.wasm` file in the `target/wasm32-unknown-unknown/rel
 
 As this example is very simple and does not require any of the data from the custom sections of the WebAssembly module, you may use `wasm-strip` if you have the [WebAssembly Binary Toolkit](https://github.com/WebAssembly/wabt) installed:
 
-```
+```text
 wasm-strip target/wasm32-unknown-unknown/release/hello.wasm
 ```
 
@@ -98,7 +98,7 @@ This will add a `dotnet` command to your PATH.
 
 The .NET program will be a simple console application, so create a new console project with `dotnet new`:
 
-```
+```text
 mkdir tutorial
 cd tutorial
 dotnet new console
@@ -108,7 +108,7 @@ dotnet new console
 
 To use Wasmtime.NET from the project, we need to add a reference to the `Wasmtime` NuGet package:
 
-```
+```text
 dotnet add package --version 0.0.1-alpha1 wasmtime
 ```
 
@@ -177,7 +177,7 @@ using (var instance = module.Instantiate(new Host()))
 
 Use `dotnet build` to build the .NET application:
 
-```
+```text
 dotnet build
 ```
 
@@ -189,19 +189,19 @@ Before running the application, we need to copy the `hello.wasm` file to the pro
 
 Once the WebAssembly module is present in project directory, we can run the application:
 
-```
+```text
 dotnet run
 ```
 
 Alternatively, we can execute the program directly without building the application again:
 
-```
+```text
 bin/Debug/netcoreapp3.0/tutorial
 ```
 
 This should result in the following output:
 
-```
+```text
 Hello world!
 ```
 
