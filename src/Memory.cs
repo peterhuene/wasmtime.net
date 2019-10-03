@@ -48,11 +48,21 @@ namespace Wasmtime
         /// <summary>
         /// The span of the memory.
         /// </summary>
-        public Span<byte> Span
+        /// <remarks>
+        /// The span may become invalid if the memory grows.
+        ///
+        /// This may happen if the memory is explicitly requested to grow or
+        /// grows as a result of WebAssembly execution.
+        ///
+        /// Therefore, the returned Span should not be stored.
+        /// </remarks>
+        public unsafe Span<byte> Span
         {
             get
             {
-                unsafe { return new Span<byte>(_data, _size); }
+                var data = Interop.wasm_memory_data(_handle.DangerousGetHandle());
+                var size = Convert.ToInt32(Interop.wasm_memory_data_size(_handle.DangerousGetHandle()).ToUInt32());
+                return new Span<byte>(data, size);
             }
         }
 
@@ -252,18 +262,9 @@ namespace Wasmtime
             set
             {
                 _handle = value;
-
-                unsafe
-                {
-                    _data = Interop.wasm_memory_data(_handle.DangerousGetHandle());
-                    _size = Convert.ToInt32(Interop.wasm_memory_data_size(_handle.DangerousGetHandle()).ToUInt32());
-                }
             }
         }
 
         private Interop.MemoryHandle _handle;
-
-        private unsafe byte* _data;
-        private int _size;
     }
 }
