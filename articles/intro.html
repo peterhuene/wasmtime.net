@@ -80,12 +80,12 @@
 <p>To get started with Rust, install <a href="https://rustup.rs/">rustup</a>, the manager for Rust toolchains.</p>
 <p>This will install both a <code>rustup</code> command and a <code>cargo</code> command (for the active Rust toolchain) to your PATH.</p>
 <h2 id="installing-the-webassembly-target">Installing the WebAssembly target</h2>
-<p>To target WebAssembly with the active Rust toolchain, install the <code>WebAssembly</code> <a href="https://forge.rust-lang.org/release/platform-support.html">target triple</a>:</p>
-<pre><code>rustup target add wasm32-unknown-unknown
+<p>To target WebAssembly with the active Rust toolchain, install the WebAssembly <a href="https://forge.rust-lang.org/release/platform-support.html">target triple</a>:</p>
+<pre><code class="lang-text">rustup target add wasm32-unknown-unknown
 </code></pre>
 <h2 id="creating-the-rust-project">Creating the Rust project</h2>
 <p>Create a new Rust library project named <code>hello</code>:</p>
-<pre><code>cargo new --lib hello
+<pre><code class="lang-text">cargo new --lib hello
 cd hello
 </code></pre>
 <p>To target WebAssembly, the library needs to be built as a <code>cdylib</code> (dynamic library) rather than the default of a static Rust library.  Add the following to the <code>Cargo.toml</code> file in the project root:</p>
@@ -110,11 +110,11 @@ pub unsafe extern fn run() {
 <p>Also note that the <em>address</em> is not actually a physical memory address within the address space of a process but an address within the <em><a href="https://hacks.mozilla.org/2017/07/memory-in-webassembly-and-why-its-safer-than-you-think/">WebAssembly memory</a></em> of the module.  Thus the WebAssembly module has no direct access to the memory of the host environment.</p>
 <h2 id="building-the-webassembly-module">Building the WebAssembly module</h2>
 <p>Use <code>cargo build</code> to build the WebAssembly module:</p>
-<pre><code>cargo build --target wasm32-unknown-unknown --release
+<pre><code class="lang-text">cargo build --target wasm32-unknown-unknown --release
 </code></pre>
 <p>This should create a <code>hello.wasm</code> file in the <code>target/wasm32-unknown-unknown/release</code> directory.  We will use <code>hello.wasm</code> in the next section of the tutorial.</p>
 <p>As this example is very simple and does not require any of the data from the custom sections of the WebAssembly module, you may use <code>wasm-strip</code> if you have the <a href="https://github.com/WebAssembly/wabt">WebAssembly Binary Toolkit</a> installed:</p>
-<pre><code>wasm-strip target/wasm32-unknown-unknown/release/hello.wasm
+<pre><code class="lang-text">wasm-strip target/wasm32-unknown-unknown/release/hello.wasm
 </code></pre>
 <p>The resulting file should be less than 200 bytes.</p>
 <h1 id="using-the-webassembly-module-from-net">Using the WebAssembly module from .NET</h1>
@@ -123,13 +123,13 @@ pub unsafe extern fn run() {
 <p>This will add a <code>dotnet</code> command to your PATH.</p>
 <h2 id="creating-the-net-core-project">Creating the .NET Core project</h2>
 <p>The .NET program will be a simple console application, so create a new console project with <code>dotnet new</code>:</p>
-<pre><code>mkdir tutorial
+<pre><code class="lang-text">mkdir tutorial
 cd tutorial
 dotnet new console
 </code></pre>
 <h2 id="referencing-the-wasmtimenet-package">Referencing the Wasmtime.NET package</h2>
 <p>To use Wasmtime.NET from the project, we need to add a reference to the <code>Wasmtime</code> NuGet package:</p>
-<pre><code>dotnet add package --version 0.0.1-alpha1 wasmtime
+<pre><code class="lang-text">dotnet add package --version 0.0.1-alpha1 wasmtime
 </code></pre>
 <p><em>Note that the <code>--version</code> option is required because the <code>Wasmtime</code> package is prerelease.</em></p>
 <p>This will add a <code>PackageReference</code> to the project file so that Wasmtime.NET can be used.</p>
@@ -181,19 +181,19 @@ using (var instance = module.Instantiate(new Host()))
 </code></pre>
 <h2 id="building-the-net-application">Building the .NET application</h2>
 <p>Use <code>dotnet build</code> to build the .NET application:</p>
-<pre><code>dotnet build
+<pre><code class="lang-text">dotnet build
 </code></pre>
 <p>This will create a <code>tutorial.dll</code> in the <code>bin/Debug/netcoreapp3.0</code> directory that implements the .NET Core application.  An executable <code>tutorial</code> (or <code>tutorial.exe</code> on Windows) should also be present in the same directory to run the application.</p>
 <h2 id="running-the-net-application">Running the .NET application</h2>
 <p>Before running the application, we need to copy the <code>hello.wasm</code> file to the project directory.</p>
 <p>Once the WebAssembly module is present in project directory, we can run the application:</p>
-<pre><code>dotnet run
+<pre><code class="lang-text">dotnet run
 </code></pre>
 <p>Alternatively, we can execute the program directly without building the application again:</p>
-<pre><code>bin/Debug/netcoreapp3.0/tutorial
+<pre><code class="lang-text">bin/Debug/netcoreapp3.0/tutorial
 </code></pre>
 <p>This should result in the following output:</p>
-<pre><code>Hello world!
+<pre><code class="lang-text">Hello world!
 </code></pre>
 <h1 id="wrapping-up">Wrapping up</h1>
 <p>We did it!  We executed a function written in Rust from .NET and a function implemented in .NET from Rust without much trouble at all.  And, thanks to the design of WebAssembly, the Rust code was effectively sandboxed from accessing the memory of the .NET application.</p>

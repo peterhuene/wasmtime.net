@@ -326,3 +326,11 @@ blockquote {
         margin-left: 21%;
     }
 }
+
+code {
+    color:#257ac7;
+}
+
+.lang-text {
+    color:#ccd5dc;
+}
