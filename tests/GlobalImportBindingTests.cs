@@ -42,10 +42,14 @@ namespace Wasmtime.Tests
 
         class NotAValidGlobalTypeHost : IHost
         {
+            public struct NotAValue
+            {
+            }
+
             public Instance Instance { get; set; }
 
             [Import("global_i32_mut")]
-            public readonly Global<string> x = new Global<string>("nope");
+            public readonly MutableGlobal<NotAValue> x = new MutableGlobal<NotAValue>(new NotAValue());
         }
 
         class TypeMismatchHost : IHost
@@ -162,7 +166,8 @@ namespace Wasmtime.Tests
 
             action
                 .Should()
-                .Throw<NotSupportedException>("Type is expected to be 'int', 'long', 'float', or 'double'.");
+                .Throw<NotSupportedException>()
+                .WithMessage("Type 'Wasmtime.Tests.GlobalImportBindingTests+NotAValidGlobalTypeHost+NotAValue' is not a supported WebAssembly value type.");
         }
 
         [Fact]

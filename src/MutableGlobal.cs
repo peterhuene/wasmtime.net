@@ -24,7 +24,7 @@ namespace Wasmtime
         {
             get
             {
-                if (Handle == null)
+                if (Handle is null)
                 {
                     throw new InvalidOperationException("The global cannot be used before it is instantiated.");
                 }
@@ -41,7 +41,7 @@ namespace Wasmtime
             }
             set
             {
-                if (Handle == null)
+                if (Handle is null)
                 {
                     throw new InvalidOperationException("The global cannot be used before it is instantiated.");
                 }

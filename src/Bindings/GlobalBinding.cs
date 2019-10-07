@@ -17,12 +17,12 @@ namespace Wasmtime.Bindings
         /// <param name="field">The field the import is bound to.</param>
         public GlobalBinding(GlobalImport import, FieldInfo field)
         {
-            if (import == null)
+            if (import is null)
             {
                 throw new ArgumentNullException(nameof(import));
             }
 
-            if (field == null)
+            if (field is null)
             {
                 throw new ArgumentNullException(nameof(field));
             }
@@ -111,7 +111,7 @@ namespace Wasmtime.Bindings
 
             if (Interop.TryGetValueKind(arg, out var kind))
             {
-                if (Import.Kind != kind)
+                if (!Interop.IsMatchingKind(kind, Import.Kind))
                 {
                     ThrowBindingException(Import, Field, $"global type argument is expected to be of type '{Interop.ToString(Import.Kind)}'");
                 }

@@ -21,12 +21,12 @@ namespace Wasmtime.Bindings
 
         internal static List<Binding> GetImportBindings(IHost host, Module module)
         {
-            if (host == null)
+            if (host is null)
             {
                 throw new ArgumentNullException(nameof(host));
             }
 
-            if (module == null)
+            if (module is null)
             {
                 throw new ArgumentNullException(nameof(module));
             }
@@ -66,7 +66,7 @@ namespace Wasmtime.Bindings
             var method = methods.Where(m =>
                 {
                     var attribute = (ImportAttribute)m.GetCustomAttribute(typeof(ImportAttribute));
-                    if (attribute == null)
+                    if (attribute is null)
                     {
                         return false;
                     }
@@ -78,7 +78,7 @@ namespace Wasmtime.Bindings
                 }
             ).FirstOrDefault();
 
-            if (method == null)
+            if (method is null)
             {
                 throw new WasmtimeException($"Failed to bind function import '{import}': the host does not contain a method with a matching 'Import' attribute.");
             }
@@ -98,7 +98,7 @@ namespace Wasmtime.Bindings
                 }
             ).FirstOrDefault();
 
-            if (field == null)
+            if (field is null)
             {
                 throw new WasmtimeException($"Failed to bind global import '{import}': the host does not contain a global field with a matching 'Import' attribute.");
             }
@@ -118,7 +118,7 @@ namespace Wasmtime.Bindings
                 }
             ).FirstOrDefault();
 
-            if (field == null)
+            if (field is null)
             {
                 throw new WasmtimeException($"Failed to bind memory import '{import}': the host does not contain a memory field with a matching 'Import' attribute.");
             }

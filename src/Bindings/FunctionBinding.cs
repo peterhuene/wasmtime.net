@@ -20,12 +20,12 @@ namespace Wasmtime.Bindings
         /// <param name="method">The method the import is bound to.</param>
         public FunctionBinding(FunctionImport import, MethodInfo method)
         {
-            if (import == null)
+            if (import is null)
             {
                 throw new ArgumentNullException(nameof(import));
             }
 
-            if (method == null)
+            if (method is null)
             {
                 throw new ArgumentNullException(nameof(method));
             }
@@ -115,7 +115,7 @@ namespace Wasmtime.Bindings
                 }
 
                 var expected = Import.Parameters[i];
-                if (!Interop.TryGetValueKind(parameter.ParameterType, out var kind) || kind != expected)
+                if (!Interop.TryGetValueKind(parameter.ParameterType, out var kind) || !Interop.IsMatchingKind(kind, expected))
                 {
                     ThrowBindingException(Import, Method, $"method parameter '{parameter.Name}' is expected to be of type '{Interop.ToString(expected)}'");
                 }
@@ -135,7 +135,7 @@ namespace Wasmtime.Bindings
             else if (resultsCount == 1)
             {
                 var expected = Import.Results[0];
-                if (!Interop.TryGetValueKind(Method.ReturnType, out var kind) || kind != expected)
+                if (!Interop.TryGetValueKind(Method.ReturnType, out var kind) || !Interop.IsMatchingKind(kind, expected))
                 {
                     ThrowBindingException(Import, Method, $"return type is expected to be '{Interop.ToString(expected)}'");
                 }
@@ -161,7 +161,7 @@ namespace Wasmtime.Bindings
                 foreach (var typeArgument in typeArguments)
                 {
                     var expected = Import.Results[i];
-                    if (!Interop.TryGetValueKind(typeArgument, out var kind) || kind != expected)
+                    if (!Interop.TryGetValueKind(typeArgument, out var kind) || !Interop.IsMatchingKind(kind, expected))
                     {
                         ThrowBindingException(Import, Method, $"return tuple item #{i} is expected to be of type '{Interop.ToString(expected)}'");
                     }

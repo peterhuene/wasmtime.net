@@ -51,7 +51,7 @@ namespace Wasmtime
         /// <returns>Returns a new <see cref="Instance" />.</returns>
         public Instance Instantiate(IHost host)
         {
-            if (host == null)
+            if (host is null)
             {
                 throw new ArgumentNullException(nameof(host));
             }

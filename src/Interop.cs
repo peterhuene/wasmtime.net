@@ -261,7 +261,7 @@ namespace Wasmtime
             public uint max;
         }
 
-        internal static wasm_val_t ToValue(object o, ValueKind kind)
+        public static wasm_val_t ToValue(object o, ValueKind kind)
         {
             wasm_val_t value = new wasm_val_t();
             switch (kind)
@@ -294,7 +294,7 @@ namespace Wasmtime
             return value;
         }
 
-        internal static unsafe object ToObject(wasm_val_t* v)
+        public static unsafe object ToObject(wasm_val_t* v)
         {
             switch (v->kind)
             {
@@ -354,7 +354,7 @@ namespace Wasmtime
                 return kind;
             }
 
-            throw new NotSupportedException("Type is expected to be 'int', 'long', 'float', or 'double'.");
+            throw new NotSupportedException($"Type '{type}' is not a supported WebAssembly value type.");
         }
 
         public static string ToString(ValueKind kind)
@@ -376,6 +376,21 @@ namespace Wasmtime
                 default:
                     throw new NotSupportedException("Unsupported value kind.");
             }
+        }
+
+        public static bool IsMatchingKind(ValueKind kind, ValueKind expected)
+        {
+            if (kind == expected)
+            {
+                return true;
+            }
+
+            if (expected == ValueKind.AnyRef)
+            {
+                return kind == ValueKind.FuncRef;
+            }
+
+            return false;
         }
 
         internal unsafe delegate IntPtr WasmFuncCallback(wasm_val_t* parameters, wasm_val_t* results);

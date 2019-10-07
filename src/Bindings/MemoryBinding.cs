@@ -17,12 +17,12 @@ namespace Wasmtime.Bindings
         /// <param name="field">The field the import is bound to.</param>
         public MemoryBinding(MemoryImport import, FieldInfo field)
         {
-            if (import == null)
+            if (import is null)
             {
                 throw new ArgumentNullException(nameof(import));
             }
 
-            if (field == null)
+            if (field is null)
             {
                 throw new ArgumentNullException(nameof(field));
             }
