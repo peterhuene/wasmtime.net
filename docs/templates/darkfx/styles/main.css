@@ -328,9 +328,67 @@ blockquote {
 }
 
 code {
-    color:#257ac7;
+    color:#8ec4f5;
 }
 
 .lang-text {
     color:#ccd5dc;
+}
+
+button, a {
+    color: #8ec4f5;
+}
+
+.affix > ul > li.active > a, .affix > ul > li.active > a:before {
+    color: #8ec4f5;
+}
+
+.affix ul > li.active > a, .affix ul > li.active > a:before {
+    color: #8ec4f5;
+}
+
+.affix ul > li > a {
+    color: #d3cfcf;
+}
+
+button:hover, button:focus, a:hover, a:focus {
+  color: #339eff;
+}
+
+.toc .nav > li.active > a {
+    color: #8ec4f5;
+}
+
+.toc .nav > li.active > a:hover, .toc .nav > li.active > a:focus {
+    color: #339eff;
+}
+
+.navbar-inverse .navbar-nav > li > a, .navbar-inverse .navbar-text {
+    color: #9898a6;
+}
+
+.navbar-inverse .navbar-nav>.active>a,
+.navbar-inverse .navbar-nav>.active>a:focus,
+.navbar-inverse .navbar-nav>.active>a:hover {
+    color: #fff;
+}
+
+.hljs-attr,.hljs-selector-attr,.hljs-selector-class,.hljs-selector-id,.hljs-selector-pseudo,.hljs-title {
+    color:#b685ff;
+}
+
+.hljs-keyword,.hljs-selector-tag,.hljs-type {
+    color:#cc74a6;
+}
+
+.hljs-emphasis,.hljs-quote,.hljs-string,.hljs-strong,.hljs-template-variable,.hljs-variable {
+    color:#cc74a6
+}
+
+#breadcrumb .breadcrumb >li a {
+    color: #999;
+}
+
+.toc-filter > input {
+    color: #d3cfcf;
 }
