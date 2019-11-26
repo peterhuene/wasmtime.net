@@ -5,10 +5,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Introduction to Wasmtime.NET </title>
+    <title>Introduction to Wasmtime for .NET </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Introduction to Wasmtime.NET ">
-    <meta name="generator" content="docfx 2.45.1.0">
+    <meta name="title" content="Introduction to Wasmtime for .NET ">
+    <meta name="generator" content="docfx 2.47.0.0">
     
     <link rel="shortcut icon" href="../favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -67,15 +67,15 @@
         <div class="article row grid-right">
           <div class="col-md-10">
             <article class="content wrap" id="_content" data-uid="">
-<h1 id="introduction-to-wasmtimenet">Introduction to Wasmtime.NET</h1>
+<h1 id="introduction-to-wasmtime-for-net">Introduction to Wasmtime for .NET</h1>
 
-<p><a href="https://github.com/CraneStation/wasmtime">Wasmtime</a> is a standalone runtime capable of executing <a href="https://webassembly.org/">WebAssembly</a> outside of a web browser.</p>
-<p>Wasmtime.NET is a .NET API for Wasmtime.  It enables .NET developers to easily instantiate and execute WebAssembly modules.</p>
+<p><a href="https://github.com/bytecodealliance/wasmtime">Wasmtime</a> is a standalone runtime capable of executing <a href="https://webassembly.org/">WebAssembly</a> outside of a web browser.</p>
+<p>Wasmtime for .NET is a .NET API for Wasmtime.  It enables .NET developers to easily instantiate and execute WebAssembly modules.</p>
 <p>For this tutorial, we will create a WebAssembly module from a program written in Rust and use that WebAssembly module from a .NET Core 3.0 application.</p>
 <h1 id="creating-a-simple-webassembly-module">Creating a simple WebAssembly module</h1>
 <p>One of the reasons why WebAssembly is so exciting is that <a href="https://github.com/appcypher/awesome-wasm-langs">many languages are able to target WebAssembly</a>.  This means, for example, a plugin model based on WebAssembly could enable developers to write sandboxed, cross-platform plugins in any number of languages.</p>
 <p>Here I've decided to use <a href="https://www.rust-lang.org/">Rust</a> for the implementation of the WebAssembly module.  Rust is a modern systems programming language that can easily target WebAssembly.</p>
-<p>If you wish to skip creating the WebAssembly module, download the <a href="https://raw.githubusercontent.com/peterhuene/wasmtime.net/master/docs/wasm/intro/hello.wasm">prebuilt WebAssembly module</a> from this tutorial, copy it to your .NET project directory, and continue from the <em><a href="#using-the-webassembly-module-from-net">Using the WebAssembly module from .NET</a></em> section.</p>
+<p>If you wish to skip creating the WebAssembly module, download the <a href="https://raw.githubusercontent.com/bytecodealliance/wasmtime/master/crates/misc/dotnet/docs/wasm/intro/hello.wasm">prebuilt WebAssembly module</a> from this tutorial, copy it to your .NET project directory, and continue from the <em><a href="#using-the-webassembly-module-from-net">Using the WebAssembly module from .NET</a></em> section.</p>
 <h2 id="installing-a-rust-toolchain">Installing a Rust toolchain</h2>
 <p>To get started with Rust, install <a href="https://rustup.rs/">rustup</a>, the manager for Rust toolchains.</p>
 <p>This will install both a <code>rustup</code> command and a <code>cargo</code> command (for the active Rust toolchain) to your PATH.</p>
@@ -127,12 +127,12 @@ pub unsafe extern fn run() {
 cd tutorial
 dotnet new console
 </code></pre>
-<h2 id="referencing-the-wasmtimenet-package">Referencing the Wasmtime.NET package</h2>
-<p>To use Wasmtime.NET from the project, we need to add a reference to the <a href="https://www.nuget.org/packages/Wasmtime">Wasmtime NuGet package</a>:</p>
+<h2 id="referencing-the-wasmtime-for-net-package">Referencing the Wasmtime for .NET package</h2>
+<p>To use Wasmtime for .NET from the project, we need to add a reference to the <a href="https://www.nuget.org/packages/Wasmtime">Wasmtime NuGet package</a>:</p>
 <pre><code class="lang-text">dotnet add package --version 0.0.1-alpha1 wasmtime
 </code></pre>
 <p><em>Note that the <code>--version</code> option is required because the package is currently prerelease.</em></p>
-<p>This will add a <code>PackageReference</code> to the project file so that Wasmtime.NET can be used.</p>
+<p>This will add a <code>PackageReference</code> to the project file so that Wasmtime for .NET can be used.</p>
 <h2 id="implementing-the-net-code">Implementing the .NET code</h2>
 <p>Replace the contents of <code>Program.cs</code> with the following:</p>
 <pre><code class="lang-c#">using System;
@@ -167,7 +167,7 @@ namespace Tutorial
     }
 }
 </code></pre>
-<p>The <code>Host</code> class is responsible for implementing the imported <a href="https://webassembly.github.io/spec/core/syntax/modules.html#functions">functions</a>, <a href="https://webassembly.github.io/spec/core/syntax/modules.html#globals">globals</a>, <a href="https://webassembly.github.io/spec/core/syntax/modules.html#memories">memories</a>, and <a href="https://webassembly.github.io/spec/core/syntax/modules.html#syntax-table">tables</a> for the WebAssembly module.  For Wasmtime.NET, this is done via the <a href="https://peterhuene.github.io/wasmtime.net/api/Wasmtime.ImportAttribute.html"><code>Import</code></a> attribute applied to functions and fields of type <a href="https://peterhuene.github.io/wasmtime.net/api/Wasmtime.Global-1.html"><code>Global&lt;T&gt;</code></a>, <a href="https://peterhuene.github.io/wasmtime.net/api/Wasmtime.MutableGlobal-1.html"><code>MutableGlobal&lt;T&gt;</code></a>, and <a href="https://peterhuene.github.io/wasmtime.net/api/Wasmtime.Memory.html"><code>Memory</code></a> (support for WebAssembly tables is not yet implemented).  The <a href="https://peterhuene.github.io/wasmtime.net/api/Wasmtime.IHost.html#Wasmtime_IHost_Instance"><code>Instance</code></a> property of the host is set during instantiation of the WebAssembly module.</p>
+<p>The <code>Host</code> class is responsible for implementing the imported <a href="https://webassembly.github.io/spec/core/syntax/modules.html#functions">functions</a>, <a href="https://webassembly.github.io/spec/core/syntax/modules.html#globals">globals</a>, <a href="https://webassembly.github.io/spec/core/syntax/modules.html#memories">memories</a>, and <a href="https://webassembly.github.io/spec/core/syntax/modules.html#syntax-table">tables</a> for the WebAssembly module.  For Wasmtime for .NET, this is done via the <a href="https://peterhuene.github.io/wasmtime.net/api/Wasmtime.ImportAttribute.html"><code>Import</code></a> attribute applied to functions and fields of type <a href="https://peterhuene.github.io/wasmtime.net/api/Wasmtime.Global-1.html"><code>Global&lt;T&gt;</code></a>, <a href="https://peterhuene.github.io/wasmtime.net/api/Wasmtime.MutableGlobal-1.html"><code>MutableGlobal&lt;T&gt;</code></a>, and <a href="https://peterhuene.github.io/wasmtime.net/api/Wasmtime.Memory.html"><code>Memory</code></a> (support for WebAssembly tables is not yet implemented).  The <a href="https://peterhuene.github.io/wasmtime.net/api/Wasmtime.IHost.html#Wasmtime_IHost_Instance"><code>Instance</code></a> property of the host is set during instantiation of the WebAssembly module.</p>
 <p>Here the host is implementing an import of <code>print</code> in the <code>env</code> module, which is the default import module name for WebAssembly modules compiled using the Rust toolchain.</p>
 <p>The <a href="https://peterhuene.github.io/wasmtime.net/api/Wasmtime.Engine.html"><code>Engine</code></a> is used to create a <a href="https://peterhuene.github.io/wasmtime.net/api/Wasmtime.Store.html"><code>Store</code></a> that will store all Wasmtime runtime objects, such as WebAssembly modules and their instantiations.</p>
 <p>A WebAssembly module <em>instantiation</em> is the stateful representation of a module that can be executed.  Here, the code is casting the <a href="https://peterhuene.github.io/wasmtime.net/api/Wasmtime.Instance.html"><code>Instance</code></a> to <a href="https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/types/using-type-dynamic"><code>dynamic</code></a> which allows us to easily invoke the <code>run</code> function that was exported by the WebAssembly module.</p>
@@ -197,8 +197,8 @@ using (var instance = module.Instantiate(new Host()))
 </code></pre>
 <h1 id="wrapping-up">Wrapping up</h1>
 <p>We did it!  We executed a function written in Rust from .NET and a function implemented in .NET from Rust without much trouble at all.  And, thanks to the design of WebAssembly, the Rust code was effectively sandboxed from accessing the memory of the .NET application.</p>
-<p>Hopefully this introduction to Wasmtime.NET has offered a small glipse of the potential of using WebAssembly from .NET.</p>
-<p>One last note: <em>Wasmtime.NET is currently in a very early stage of development and the API might change dramatically in the future</em>.</p>
+<p>Hopefully this introduction to Wasmtime for .NET has offered a small glipse of the potential of using WebAssembly from .NET.</p>
+<p>One last note: <em>Wasmtime for .NET is currently in a very early stage of development and the API might change dramatically in the future</em>.</p>
 </article>
           </div>
           
@@ -207,7 +207,7 @@ using (var instance = module.Instantiate(new Host()))
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/peterhuene/wasmtime.net/blob/master/docs/articles/intro.md/#L1" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/bytecodealliance/wasmtime/blob/master/crates/misc/dotnet/docs/articles/intro.md/#L1" class="contribution-link">Improve this Doc</a>
                   </li>
                 </ul>
               </div>

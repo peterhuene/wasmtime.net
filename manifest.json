@@ -1,6 +1,6 @@
 {
   "homepages": [],
-  "source_base_path": "/Users/phuene/src/wasmtime.net/docs",
+  "source_base_path": "/Users/phuene/tmp/wasmtime/crates/misc/dotnet/docs",
   "xrefmap": "xrefmap.yml",
   "files": [
     {
@@ -9,7 +9,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Bindings.Binding.html",
-          "hash": "VNGwCXBrGblRXYh3Puf1jw=="
+          "hash": "OkcYrsQ7rFlbidpcerciHw=="
         }
       },
       "is_incremental": false,
@@ -21,7 +21,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Bindings.FunctionBinding.html",
-          "hash": "Iv+vqUahqtW7ZcVynCVTPw=="
+          "hash": "zIs7fXlWIEZHVPzqTrcpVA=="
         }
       },
       "is_incremental": false,
@@ -33,7 +33,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Bindings.GlobalBinding.html",
-          "hash": "V7kwWtpmobjNgEByt62f5w=="
+          "hash": "9IFaH9XU3HqYt9B3itVdjA=="
         }
       },
       "is_incremental": false,
@@ -45,7 +45,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Bindings.MemoryBinding.html",
-          "hash": "qe93gy9rvsCCGKxZIur+oQ=="
+          "hash": "EiRpfAEi8HOaLsoAYeeOdg=="
         }
       },
       "is_incremental": false,
@@ -57,7 +57,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Bindings.html",
-          "hash": "rXkSSZSl8u50iXuKd80+0A=="
+          "hash": "m6A2Qvx7ZfCxhdATdqw9aA=="
         }
       },
       "is_incremental": false,
@@ -69,7 +69,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Engine.html",
-          "hash": "TabYSdM8/TyCVpRE+M2fJg=="
+          "hash": "+19U+AJKoPA4L+kvSMsdlg=="
         }
       },
       "is_incremental": false,
@@ -81,7 +81,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Exports.Export.html",
-          "hash": "iWOrM5DSwtKWBWoUqw48XA=="
+          "hash": "u1tYe4tNzsz9GVR05NuZXg=="
         }
       },
       "is_incremental": false,
@@ -93,7 +93,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Exports.Exports.html",
-          "hash": "49tgdFWLsKZCJQiHX2O0dw=="
+          "hash": "FG2RhmnU1FArUrQ+a4F72g=="
         }
       },
       "is_incremental": false,
@@ -105,7 +105,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Exports.FunctionExport.html",
-          "hash": "rxBh0Nr6cSNFIhKr/rbafA=="
+          "hash": "s8pCV+bbSYI7fWt83VUrvw=="
         }
       },
       "is_incremental": false,
@@ -117,7 +117,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Exports.GlobalExport.html",
-          "hash": "pVd1S9cqhWz0Bny2L/Q2Ew=="
+          "hash": "MIX44Af2fUc/qyp2FIHUMA=="
         }
       },
       "is_incremental": false,
@@ -129,7 +129,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Exports.MemoryExport.html",
-          "hash": "q4VF+N7UCR0oguxbyaNzaA=="
+          "hash": "dPEulkY9u+oMSNrod3vMAw=="
         }
       },
       "is_incremental": false,
@@ -141,7 +141,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Exports.TableExport.html",
-          "hash": "gV/Yede2dkE36FYYsBDczQ=="
+          "hash": "I0Lc24Yz4zzmw/HM+hw08Q=="
         }
       },
       "is_incremental": false,
@@ -153,7 +153,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Exports.html",
-          "hash": "fOXDl7kCUUv8WyXCmaGA4g=="
+          "hash": "khml4Bmiq7fXPa9+zrvKlw=="
         }
       },
       "is_incremental": false,
@@ -165,7 +165,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Externs.ExternFunction.html",
-          "hash": "tEBD09YG7dByM8mGCSGiiQ=="
+          "hash": "Kq96G42DVHWGwfBGS8LF4g=="
         }
       },
       "is_incremental": false,
@@ -177,7 +177,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Externs.ExternGlobal.html",
-          "hash": "+rHoHFHYTcbRgcZH22pvAw=="
+          "hash": "0fPR7eXaKwuBXt7A3Bsi4w=="
         }
       },
       "is_incremental": false,
@@ -189,7 +189,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Externs.ExternMemory.html",
-          "hash": "kwGY9PCSaeYvn7jAmB7c8Q=="
+          "hash": "rVl4qcJEGMkjMNjCB+GC2A=="
         }
       },
       "is_incremental": false,
@@ -201,7 +201,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Externs.Externs.html",
-          "hash": "/3twKlHpPyJ2jy0tTb6e5g=="
+          "hash": "js1O/9ELjUP2xxKfw8Veow=="
         }
       },
       "is_incremental": false,
@@ -213,7 +213,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Externs.html",
-          "hash": "0w85scdpS8iA/BPRq2jXSA=="
+          "hash": "t5xhf7nqzCHHf41O2Q/+ZA=="
         }
       },
       "is_incremental": false,
@@ -225,7 +225,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Global-1.html",
-          "hash": "nkDSSRI0e4g057XjDmrrfg=="
+          "hash": "hbvkhCGnhGep9sAFR5TlkQ=="
         }
       },
       "is_incremental": false,
@@ -237,7 +237,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.IHost.html",
-          "hash": "i4bsanIAmPUc4Ex9dLXUfw=="
+          "hash": "swFzAGqXe1VIsnUliLrPtw=="
         }
       },
       "is_incremental": false,
@@ -249,7 +249,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.ImportAttribute.html",
-          "hash": "XWk9J05wNXrGyaJyngVCUQ=="
+          "hash": "mz0CERJF51Rnan3K6CXDSw=="
         }
       },
       "is_incremental": false,
@@ -261,7 +261,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Imports.FunctionImport.html",
-          "hash": "TWjE/xCdoHEkOY4K8pLfTQ=="
+          "hash": "Jb2f9Qsfm51c9zRfCahsgQ=="
         }
       },
       "is_incremental": false,
@@ -273,7 +273,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Imports.GlobalImport.html",
-          "hash": "b8LZ40HuWLAFNvyInmT48w=="
+          "hash": "DudN349Fs47mlmlNeHjAKg=="
         }
       },
       "is_incremental": false,
@@ -285,7 +285,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Imports.Import.html",
-          "hash": "mSn69iqnHVGDT/xDpMLKIg=="
+          "hash": "x40pPRdA8PZGqtde4IJU3Q=="
         }
       },
       "is_incremental": false,
@@ -297,7 +297,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Imports.Imports.html",
-          "hash": "kyLP+93qdiQjmtkxNmmzhQ=="
+          "hash": "9TCgYmr+JW5sLSlENYEJ2A=="
         }
       },
       "is_incremental": false,
@@ -309,7 +309,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Imports.MemoryImport.html",
-          "hash": "3QkHNTMfCfhtRxz2QfTPcw=="
+          "hash": "CtPAUP2RlxUMcCWNux4gdQ=="
         }
       },
       "is_incremental": false,
@@ -321,7 +321,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Imports.TableImport.html",
-          "hash": "pYjlGtmohbB5SblULPRqnA=="
+          "hash": "3LY/5HcVVIRRKWRknZbpiw=="
         }
       },
       "is_incremental": false,
@@ -333,7 +333,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Imports.html",
-          "hash": "yBpb738ztY4vx0MtlKu2WA=="
+          "hash": "A8IYENxq/5lrdYLhs7qpXA=="
         }
       },
       "is_incremental": false,
@@ -345,7 +345,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Instance.html",
-          "hash": "cmsB1coMVKxgcfOCdfJQJg=="
+          "hash": "t7DMY3M8XLing/xhmL40fg=="
         }
       },
       "is_incremental": false,
@@ -357,7 +357,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Memory.html",
-          "hash": "pg7WZDDPJKJj2UtAl1HLIA=="
+          "hash": "B3kFv5LAqd3tDR+fpYHk4g=="
         }
       },
       "is_incremental": false,
@@ -369,7 +369,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Module.html",
-          "hash": "t/uWvaPzaH9FgXj4jVs+jw=="
+          "hash": "g0kmpaYdPBgw3/oB2ML4VA=="
         }
       },
       "is_incremental": false,
@@ -381,7 +381,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.MutableGlobal-1.html",
-          "hash": "ZO8/XKuMHbEp5GfGKm0Giw=="
+          "hash": "vVJAgTtbiUqa3tK6bD0ibQ=="
         }
       },
       "is_incremental": false,
@@ -393,7 +393,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.Store.html",
-          "hash": "Z1h65sUqkP+V+eMSsg+83Q=="
+          "hash": "pc9XZtb4U6G0HUhFaMwNKA=="
         }
       },
       "is_incremental": false,
@@ -405,7 +405,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.TrapException.html",
-          "hash": "sgYPiZXf53NSVqKiIKu+aQ=="
+          "hash": "qBLKgA4LkJG2Gz+Rg0fnpw=="
         }
       },
       "is_incremental": false,
@@ -417,7 +417,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.ValueKind.html",
-          "hash": "Q7RCQ3jsTvZxGOeHRrbYhQ=="
+          "hash": "MO3l1Ts4hiuTQv72GTabYw=="
         }
       },
       "is_incremental": false,
@@ -429,7 +429,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.WasmtimeException.html",
-          "hash": "bvQvClUA6CGp5x5w3+5enw=="
+          "hash": "Q89ymL5Mc4G/k/7enukXAw=="
         }
       },
       "is_incremental": false,
@@ -441,7 +441,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Wasmtime.html",
-          "hash": "rD7VAF1MfU6R/7xBiyyYZw=="
+          "hash": "aEye+kKUi+CoRG31jnkjAg=="
         }
       },
       "is_incremental": false,
@@ -456,7 +456,7 @@
       "output": {
         ".html": {
           "relative_path": "api/index.html",
-          "hash": "gY+UDUAd6QCz6A185OBGvQ=="
+          "hash": "8R/zJ93WQJgMVV8TBuioAw=="
         }
       },
       "is_incremental": false,
@@ -468,7 +468,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "fd+FQheNWaigznSMSxNkKA=="
+          "hash": "sz+7OLjrE018JS5nhR+q+w=="
         }
       },
       "is_incremental": false,
@@ -480,7 +480,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/intro.html",
-          "hash": "RT+hJdior9XmWNrbMzjxRA=="
+          "hash": "vJ+YW7j4g0nLnXXk3yt0KQ=="
         }
       },
       "is_incremental": false,
@@ -492,7 +492,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/toc.html",
-          "hash": "BU26e6n8nbVX4345cYcHpg=="
+          "hash": "8c5Y62jqLCyfXV4JfLpmfQ=="
         }
       },
       "is_incremental": false,
@@ -504,7 +504,7 @@
       "output": {
         ".html": {
           "relative_path": "index.html",
-          "hash": "801Qv9vD+BUV4r3zO9/8Gw=="
+          "hash": "m+g2ocmUq4RcehiMyb1pjQ=="
         }
       },
       "is_incremental": false,
@@ -516,7 +516,7 @@
       "output": {
         ".html": {
           "relative_path": "toc.html",
-          "hash": "N2caTmJ/E9CdUsXrzNRfsA=="
+          "hash": "MYLVJNnBGGSnToVhxR1pDQ=="
         }
       },
       "is_incremental": false,
